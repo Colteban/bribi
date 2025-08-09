@@ -3,46 +3,47 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
-import { getCollection } from 'astro:content';
-
-// Trae SOLO los posts con status "published" y ordénalos por fecha
-const posts = (await getCollection('blog', ({ data }) => data.status === 'published'))
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
 <!doctype html>
-<html lang="es">
-  <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-  </head>
-  <body>
-    <Header />
-    <main style="max-width: 860px; margin: 2rem auto; padding: 0 1rem;">
-      <h1 style="margin-bottom: .5rem;">Últimas notas</h1>
-      <p style="color:#666; margin-bottom: 2rem;">Resúmenes y acciones rápidas para comercios en Colombia/LATAM.</p>
-
-      {posts.length === 0 ? (
-        <p>Aún no hay publicaciones. Publica tu primer artículo con <code>status: "published"</code>.</p>
-      ) : (
-        <ul style="list-style: none; padding: 0; display: grid; gap: 1.25rem;">
-          {posts.map((post) => (
-            <li style="border: 1px solid #eee; border-radius: 12px; padding: 1rem;">
-              <a href={`/blog/${post.slug}/`} style="text-decoration: none;">
-                <h2 style="margin: 0 0 .25rem 0; color: inherit;">{post.data.title}</h2>
-              </a>
-              <small style="color:#777;">
-                {new Date(post.data.pubDate).toLocaleDateString('es-CO')}
-                {post.data.tags?.length ? ` · ${post.data.tags.join(' · ')}` : ''}
-              </small>
-              {post.data.description && <p style="margin:.5rem 0 0 0; color:#444;">{post.data.description}</p>}
-              {post.data.action && (
-                <p style="margin:.5rem 0 0 0;"><strong>Qué hacer hoy:</strong> {post.data.action}</p>
-              )}
-            </li>
-          ))}
-        </ul>
-      )}
-    </main>
-    <Footer />
-  </body>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>🧑‍🚀 Hello, Astronaut!</h1>
+			<p>
+				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
+				template serves as a lightweight, minimally-styled starting point for anyone looking to build
+				a personal website, blog, or portfolio with Astro.
+			</p>
+			<p>
+				This template comes with a few integrations already configured in your
+				<code>astro.config.mjs</code> file. You can customize your setup with
+				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
+				React, or Vue to your project.
+			</p>
+			<p>Here are a few ideas on how to get started with the template:</p>
+			<ul>
+				<li>Edit this page in <code>src/pages/index.astro</code></li>
+				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
+				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
+				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
+				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
+			</ul>
+			<p>
+				Have fun! If you get stuck, remember to
+				<a href="https://docs.astro.build/">read the docs</a>
+				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
+			</p>
+			<p>
+				Looking for a blog template with a bit more personality? Check out
+				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
+				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
+			</p>
+		</main>
+		<Footer />
+	</body>
 </html>

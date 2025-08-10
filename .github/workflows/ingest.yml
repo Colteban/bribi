@@ -48,3 +48,12 @@ jobs:
           title: "Bot: nuevos borradores"
           commit-message: "chore: nuevos borradores"
           body: "Borradores creados (status: draft). Cambia a 'published' los que apruebes y haz merge."
+
+      - name: Notify Telegram
+        if: steps.cpr.outputs.pull-request-number
+        run: |
+          MSG="PR #${{ steps.cpr.outputs.pull-request-number }} con borradores: ${{ steps.cpr.outputs.pull-request-url }}"
+          curl -s "https://api.telegram.org/bot${{ secrets.TG_BOT_TOKEN }}/sendMessage" \
+            -d "chat_id=${{ secrets.TG_CHAT_ID }}" \
+            -d "text=${MSG}" >/dev/null
+

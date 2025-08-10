@@ -10,6 +10,11 @@ DATA = REPO_ROOT / "data"; DATA.mkdir(parents=True, exist_ok=True)
 SEEN = DATA / "seen.json"
 FEEDS_FILE = DATA / "feeds.txt"
 
+print("USANDO RAIZ:", REPO_ROOT)
+print("CONTENIDO EN:", CONTENT)
+print("FEEDS_FILE:", FEEDS_FILE)
+
+
 MAX_NEW = int(os.getenv("MAX_NEW", "8"))
 TIMEOUT = 15
 

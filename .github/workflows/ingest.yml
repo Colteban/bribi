@@ -1,0 +1,42 @@
+name: Ingest & Draft Posts
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # corre cada 6 horas (UTC)
+  workflow_dispatch: {}       # también puedes correrlo a mano
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Random delay
+        run: sleep $((RANDOM % 240))
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          pip install feedparser trafilatura requests beautifulsoup4 pyyaml
+
+      - name: Run ingestor
+        env:
+          MAX_NEW: "8"  # tope por corrida (ajústalo si quieres)
+        run: |
+          python scripts/ingest.py
+
+      - name: Create Pull Request with drafts
+        id: cpr
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: bot/drafts-$(date +%Y%m%d%H%M)
+          title: "Bot: nuevos borradores"
+          commit-message: "chore: nuevos borradores"
+          body: "Borradores creados (status: draft). Cambia a 'published' los que apruebes y haz merge."

@@ -21,8 +21,13 @@ if SEEN.exists():
         seen = set()
 
 def slugify(s):
-    s = re.sub(r"[^a-zA-Z0-9\\- ]+","", s).strip().lower().replace(" ", "-")
-    return re.sub(r"-+","-", s)[:90]
+    # quita acentos/diacríticos (á -> a, ñ -> n)
+    s = unicodedata.normalize("NFKD", s)
+    s = "".join(c for c in s if not unicodedata.combining(c))
+    # deja letras, números, espacio y guion
+    s = re.sub(r"[^a-zA-Z0-9\- ]+", "", s)
+    s = s.strip().lower().replace(" ", "-")
+    return re.sub(r"-+", "-", s)[:90]
 
 def h(text): return hashlib.sha1(text.encode("utf-8", errors="ignore")).hexdigest()
 

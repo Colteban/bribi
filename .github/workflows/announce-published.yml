@@ -1,0 +1,35 @@
+name: Announce Published to Telegram
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/content/blog/**.md"
+
+jobs:
+  announce:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Find newly published posts
+        id: find
+        run: |
+          CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} -- 'src/content/blog/*.md' || true)
+          LIST=""
+          for f in $CHANGED; do
+            if grep -qE 'status:\s*["'\'']?published["'\'']?' "$f"; then
+              TITLE=$(awk -v RS="---" 'NR==2{print; exit}' "$f" | awk -F': ' '/^title:/{sub(/^title:\s*/,""); print}' | sed 's/^"//; s/"$//')
+              URL_SLUG=$(basename "$f" .md)
+              LIST="$LIST\n• ${TITLE:-Nuevo artículo}: https://bribi.co/blog/${URL_SLUG}/"
+            fi
+          done
+          echo -e "$LIST" > out.txt
+          if [ -s out.txt ]; then echo "has=true" >> $GITHUB_OUTPUT; fi
+
+      - name: Notify Telegram
+        if: steps.find.outputs.has == 'true'
+        run: |
+          TEXT="Nuevos publicados en Bribi:${{ '\n' }}$(cat out.txt)"
+          curl -s "https://api.telegram.org/bot${{ secrets.TG_BOT_TOKEN }}/sendMessage" \
+            -d "chat_id=${{ secrets.TG_CHAT_ID }}" \
+            -d "text=${TEXT}" >/dev/null

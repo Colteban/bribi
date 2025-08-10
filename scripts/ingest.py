@@ -29,10 +29,70 @@ def slugify(s):
     # quita acentos/diacríticos (á -> a, ñ -> n)
     s = unicodedata.normalize("NFKD", s)
     s = "".join(c for c in s if not unicodedata.combining(c))
-    # deja letras, números, espacio y guion
     s = re.sub(r"[^a-zA-Z0-9\- ]+", "", s)
     s = s.strip().lower().replace(" ", "-")
     return re.sub(r"-+", "-", s)[:90]
+
+SEP_PAT = re.compile(r"\s*(\||-|—|–|·|•|:|::)\s*")
+
+def clean_title(raw):
+    if not raw:
+        return "Actualización"
+    # corta en separadores comunes y quédate con la parte más “noticiosa”
+    parts = SEP_PAT.split(raw)
+    if len(parts) >= 3:
+        raw = parts[0]
+    # quita espacios raros y dupes
+    raw = re.sub(r"\s+", " ", raw).strip()
+    # capitaliza solo la primera letra (evita gritos)
+    return raw[:140].strip().capitalize()
+
+STOP_PHRASES = [
+    "compartir el código iframe se ha copiado en el portapapeles",
+    "publicidad",
+    "anuncio",
+    "síguenos en",
+    "newsletter",
+    "suscríbete",
+    "suscribete",
+    "le puede interesar",
+    "también le puede interesar",
+    "te puede interesar",
+    "haz clic aquí",
+    "haga clic aquí",
+    "ver más",
+    "ver mas",
+    "leer más",
+    "leer mas",
+    "continúe leyendo",
+]
+
+def clean_text(txt):
+    if not txt:
+        return ""
+    # normaliza espacios y líneas
+    lines = [re.sub(r"\s+", " ", ln).strip() for ln in txt.splitlines()]
+    # filtra boilerplate
+    out = []
+    last = None
+    for ln in lines:
+        ln_low = ln.lower()
+        if not ln or len(ln) < 3:
+            continue
+        # descarta si contiene frases basura
+        if any(p in ln_low for p in STOP_PHRASES):
+            continue
+        # descarta duplicados consecutivos
+        if last and ln == last:
+            continue
+        out.append(ln)
+        last = ln
+    # junta párrafos razonables
+    body = "\n\n".join(out).strip()
+    # colapsa saltos excesivos
+    body = re.sub(r"\n{3,}", "\n\n", body)
+    return body
+
 
 def h(text): return hashlib.sha1(text.encode("utf-8", errors="ignore")).hexdigest()
 
@@ -60,10 +120,17 @@ def discover_feed(url):
 def extract_article(url):
     try:
         downloaded = trafilatura.fetch_url(url, no_ssl=True)
-        text = trafilatura.extract(downloaded) or ""
+        text = trafilatura.extract(
+            downloaded,
+            include_comments=False,
+            include_tables=False,
+            favor_recall=True,
+            target_language="es",
+        ) or ""
         return text.strip()
     except Exception:
         return ""
+
 
 def parse_feed(feed_url, limit=8):
     items = []
@@ -93,6 +160,10 @@ def discover_articles_from_home(home_url, limit=5):
 
 def write_md(title, link, body):
     today = datetime.date.today().isoformat()
+    title = clean_title(title)
+    body = clean_text(body)
+    if not body or len(body) < 200:   # mínimo de calidad
+        return
     slug = f"{today}-{slugify(title)}"
     description = (body[:300] + "...") if len(body) > 300 else body
     fm = {
@@ -108,6 +179,7 @@ def write_md(title, link, body):
     CONTENT.mkdir(parents=True, exist_ok=True)
     md = "---\n" + yaml.safe_dump(fm, allow_unicode=True, sort_keys=False) + "---\n" + (body or "Contenido por revisar.")
     (CONTENT / f"{slug}.md").write_text(md, encoding="utf-8")
+
 
 def run():
     urls = [u.strip() for u in FEEDS_FILE.read_text(encoding="utf-8").splitlines() if u.strip() and not u.strip().startswith("#")]

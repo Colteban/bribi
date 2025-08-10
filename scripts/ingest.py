@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import os, json, hashlib, datetime, re, pathlib, yaml, time, urllib.parse
+import os, json, hashlib, datetime, re, pathlib, yaml, time, urllib.parse, unicodedata
 import feedparser, trafilatura, requests
 from bs4 import BeautifulSoup
 

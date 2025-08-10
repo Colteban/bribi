@@ -3,9 +3,10 @@ import os, json, hashlib, datetime, re, pathlib, yaml, time, urllib.parse
 import feedparser, trafilatura, requests
 from bs4 import BeautifulSoup
 
-ROOT = pathlib.Path(__file__).resolve().parents[0]
-CONTENT = ROOT / "src" / "content" / "blog"
-DATA = ROOT / "data"; DATA.mkdir(parents=True, exist_ok=True)
+# Detecta la raíz del repo (GitHub Actions expone GITHUB_WORKSPACE)
+REPO_ROOT = pathlib.Path(os.getenv("GITHUB_WORKSPACE") or pathlib.Path(__file__).resolve().parents[1]).resolve()
+CONTENT = REPO_ROOT / "src" / "content" / "blog"
+DATA = REPO_ROOT / "data"; DATA.mkdir(parents=True, exist_ok=True)
 SEEN = DATA / "seen.json"
 FEEDS_FILE = DATA / "feeds.txt"
 

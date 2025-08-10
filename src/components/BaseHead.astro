@@ -41,12 +41,14 @@ const { title, description, image = FallbackImage } = Astro.props;
 <title>{title}</title>
 <meta name="title" content={title} />
 <meta name="description" content={description} />
+<meta name="twitter:card" content="summary_large_image" />
 
 <!-- Open Graph / Facebook -->
+<meta property="og:site_name" content={SITE_TITLE} />
 <meta property="og:type" content="website" />
 <meta property="og:url" content={Astro.url} />
-<meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
+<meta property="og:title" content={title ?? SITE_TITLE} />
+<meta property="og:description" content={description ?? SITE_DESCRIPTION} />
 <meta property="og:image" content={new URL(image.src, Astro.url)} />
 
 <!-- Twitter -->

@@ -18,6 +18,17 @@ print("FEEDS_FILE:", FEEDS_FILE)
 MAX_NEW = int(os.getenv("MAX_NEW", "8"))
 TIMEOUT = 15
 
+# extraer canonical y og:image
+def extract_meta(url, html):
+    soup = BeautifulSoup(html, "html.parser")
+    canonical = soup.find("link", rel=lambda v: v and "canonical" in v.lower())
+    ogimg = soup.find("meta", property="og:image")
+    return (
+        canonical.get("href") if canonical else url,
+        ogimg.get("content") if ogimg else ""
+    )
+
+
 seen = set()
 if SEEN.exists():
     try:
@@ -99,9 +110,12 @@ def h(text): return hashlib.sha1(text.encode("utf-8", errors="ignore")).hexdiges
 def get_html(url):
     try:
         r = requests.get(url, timeout=TIMEOUT, headers={"User-Agent":"Mozilla/5.0"})
-        if r.status_code == 200: return r.text
+        if r.status_code == 200:
+            return r.text, r.url
     except Exception:
-        return None
+        return None, url
+    return None, url
+
 
 def discover_feed(url):
     if any(x in url for x in ["/feed", ".xml", "rss", "atom"]):
@@ -158,13 +172,20 @@ def discover_articles_from_home(home_url, limit=5):
         if len(links) >= limit: break
     return links
 
-def write_md(title, link, body):
+def write_md(title, link, body, og_image=""):
     today = datetime.date.today().isoformat()
     title = clean_title(title)
     body = clean_text(body)
-    if not body or len(body) < 200:   # mínimo de calidad
+    if not body or len(body) < 200:
         return
-    slug = f"{today}-{slugify(title)}"
+    base_slug = slugify(title)
+    slug = f"{today}-{base_slug}"
+    # si existe archivo con mismo nombre, agrega hash corto
+    p = CONTENT / f"{slug}.md"
+    if p.exists():
+        slug = f"{today}-{base_slug}-{h(title)[:6]}"
+        p = CONTENT / f"{slug}.md"
+
     description = (body[:300] + "...") if len(body) > 300 else body
     fm = {
         "title": title,
@@ -176,9 +197,12 @@ def write_md(title, link, body):
         "action": "Evaluar impacto en comisiones/operación.",
         "sources": [{"name": "Fuente", "url": link}],
     }
+    if og_image:
+        fm["image"] = {"src": og_image, "alt": title}
+
     CONTENT.mkdir(parents=True, exist_ok=True)
     md = "---\n" + yaml.safe_dump(fm, allow_unicode=True, sort_keys=False) + "---\n" + (body or "Contenido por revisar.")
-    (CONTENT / f"{slug}.md").write_text(md, encoding="utf-8")
+    p.write_text(md, encoding="utf-8")
 
 
 def run():
@@ -192,10 +216,18 @@ def run():
             if new_items >= MAX_NEW: break
             key = h(title + link)
             if key in seen: continue
+            html, final_url = get_html(link)
+            canon = final_url
+            og_image = ""
+            if html:
+                canon, og_image = extract_meta(final_url, html)
+            key = h(title + canon)      # usa la canónica para deduplicar
+            if key in seen: 
+                continue
             body = extract_article(link)
             if not body or len(body) < 300:
                 continue
-            write_md(title, link, body)
+            write_md(title, canon, body, og_image=og_image)
             seen.add(key)
             new_items += 1
             time.sleep(1)

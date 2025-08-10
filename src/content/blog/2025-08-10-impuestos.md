@@ -17,7 +17,7 @@ pubDate: '2025-08-10'
 tags:
 - pagos
 - LATAM
-status: draft
+status: published
 risk: bajo
 action: Evaluar impacto en comisiones/operación.
 sources:

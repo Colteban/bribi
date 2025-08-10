@@ -32,24 +32,14 @@ jobs:
         run: |
           python scripts/ingest.py
 
-      - name: Show diff
+      - name: Show status & diff
         run: |
           echo "== git status =="
           git status
           echo "== git diff --stat =="
           git --no-pager diff --stat || true
 
-      - name: Detect changes
-        id: diff
-        run: |
-          if git diff --quiet; then
-            echo "changed=false" >> $GITHUB_OUTPUT
-          else
-            echo "changed=true" >> $GITHUB_OUTPUT
-          fi
-
       - name: Create Pull Request with drafts
-        if: steps.diff.outputs.changed == 'true'
         id: cpr
         uses: peter-evans/create-pull-request@v6
         with:
@@ -58,7 +48,3 @@ jobs:
           title: "Bot: nuevos borradores"
           commit-message: "chore: nuevos borradores"
           body: "Borradores creados (status: draft). Cambia a 'published' los que apruebes y haz merge."
-
-      - name: No changes
-        if: steps.diff.outputs.changed != 'true'
-        run: echo "No hay cambios para publicar (0 borradores nuevos)."

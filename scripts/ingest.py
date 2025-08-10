@@ -118,18 +118,22 @@ def get_html(url):
 
 
 def discover_feed(url):
+    # si ya parece feed, úsalo tal cual
     if any(x in url for x in ["/feed", ".xml", "rss", "atom"]):
         return url
-    html = get_html(url)
-    if not html: return None
+    html, final_url = get_html(url)
+    if not html:
+        return None
     soup = BeautifulSoup(html, "html.parser")
-    for link in soup.find_all("link", rel=lambda v: v and "alternate" in v):
+    for link in soup.find_all("link", rel=lambda v: v and "alternate" in v.lower()):
         t = (link.get("type") or "").lower()
-        if "rss" in t or "atom" in t or "xml" in t:
+        if any(k in t for k in ("rss", "atom", "xml")):
             href = link.get("href")
-            if not href: continue
-            return urllib.parse.urljoin(url, href)
+            if not href:
+                continue
+            return urllib.parse.urljoin(final_url, href)
     return None
+
 
 def extract_article(url):
     try:
@@ -157,20 +161,24 @@ def parse_feed(feed_url, limit=8):
     return items
 
 def discover_articles_from_home(home_url, limit=5):
-    html = get_html(home_url)
-    if not html: return []
-    base = urllib.parse.urlparse(home_url).netloc
+    html, final_url = get_html(home_url)
+    if not html:
+        return []
+    base = urllib.parse.urlparse(final_url).netloc
     soup = BeautifulSoup(html, "html.parser")
     links = []
     for a in soup.find_all("a", href=True):
-        href = urllib.parse.urljoin(home_url, a["href"])
+        href = urllib.parse.urljoin(final_url, a["href"])
         u = urllib.parse.urlparse(href)
-        if u.netloc != base: continue
+        if u.netloc != base:
+            continue
         if any(seg in href.lower() for seg in ["econom", "finan", "negocio", "notic", "colombia"]):
             title = a.get_text(strip=True)[:120] or u.path
             links.append((title, href))
-        if len(links) >= limit: break
+        if len(links) >= limit:
+            break
     return links
+
 
 def write_md(title, link, body, og_image=""):
     today = datetime.date.today().isoformat()
@@ -212,25 +220,36 @@ def run():
         if new_items >= MAX_NEW: break
         feed = discover_feed(url)
         candidates = parse_feed(feed, limit=6) if feed else discover_articles_from_home(url, limit=4)
+        
+        
         for title, link in candidates:
-            if new_items >= MAX_NEW: break
-            key = h(title + link)
-            if key in seen: continue
+            if new_items >= MAX_NEW: 
+                break
             html, final_url = get_html(link)
             canon = final_url
             og_image = ""
+
             if html:
                 canon, og_image = extract_meta(final_url, html)
-            key = h(title + canon)      # usa la canónica para deduplicar
-            if key in seen: 
+                canon = urllib.parse.urljoin(final_url, canon) if canon else final_url
+                if og_image:
+                    og_image = urllib.parse.urljoin(final_url, og_image)
+
+            key = h(title + canon)
+            if key in seen:
                 continue
-            body = extract_article(link)
-            if not body or len(body) < 300:
+
+
+            source_url = canon or final_url
+            body = extract_article(source_url)
+            if not body or len(body) < 200:   # usa 200 si quieres que entre más material (antes tenías 300)
                 continue
-            write_md(title, canon, body, og_image=og_image)
+
+            write_md(title, source_url, body, og_image=og_image)
             seen.add(key)
             new_items += 1
             time.sleep(1)
+
     SEEN.write_text(json.dumps(sorted(list(seen))), encoding="utf-8")
     print(f"Drafts creados: {new_items}")
 

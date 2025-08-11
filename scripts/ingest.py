@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os, json, hashlib, datetime, re, pathlib, yaml, time, urllib.parse, unicodedata
 import feedparser, trafilatura, requests
+from collections import defaultdict
 from bs4 import BeautifulSoup
 
 import google.generativeai as genai
@@ -10,6 +11,9 @@ if GEMINI_KEY:
     GEMINI_MODEL = genai.GenerativeModel("gemini-1.5-flash")
 else:
     GEMINI_MODEL = None
+
+GEMINI_BUDGET = int(os.getenv("GEMINI_BUDGET", "12"))  # máx. llamados IA por corrida (puedes poner 10 si quieres)
+
 
 
 # Detecta la raíz del repo (GitHub Actions expone GITHUB_WORKSPACE)
@@ -26,6 +30,46 @@ print("FEEDS_FILE:", FEEDS_FILE)
 
 MAX_NEW = int(os.getenv("MAX_NEW", "8"))
 TIMEOUT = 15
+
+STYLES = {
+    # Estilo crítico/organizado para top CO y WORLD y silencios:
+    "critico": (
+        "Organiza y narra cronológica o temáticamente. "
+        "Incluye análisis crítico (causas, efectos, riesgos, oportunidades) y contrastación. "
+        "Menciona la fuente principal una sola vez de forma profesional (p. ej., 'según <dominio>')."
+    ),
+    # Emprendimiento:
+    "emprende": (
+        "Organiza con foco en emprendedores/pyme: costos, trámites, beneficios, pasos. "
+        "Menciona la fuente principal una sola vez."
+    ),
+    # Finanzas:
+    "finanzas": (
+        "Organiza temáticamente: tasas, liquidez, cartera, riesgo, indicadores, efectos para comercios. "
+        "Menciona la fuente principal una sola vez."
+    ),
+    # Economía:
+    "economia": (
+        "Organiza temáticamente: crecimiento, empleo, inflación, política monetaria/fiscal. "
+        "Menciona la fuente principal una sola vez."
+    ),
+    # Pagos/fintech:
+    "pagos": (
+        "Organiza temáticamente: rails (PIX, UPI, CBDC), redes (Visa, Mastercard, Redeban), wallets (Nequi), liquidación, interoperabilidad. "
+        "Menciona la fuente principal una sola vez."
+    ),
+    # Proyectos/Inversiones:
+    "proyectos": (
+        "Organiza temáticamente: monto, fuente de recursos, cronograma, actores, riesgos, estado. "
+        "Menciona la fuente principal una sola vez."
+    ),
+    # Boletín de respaldo:
+    "boletin": (
+        "Boletín ejecutivo: 4–6 frases claras y 3 bullets accionables. "
+        "Menciona la fuente principal una sola vez."
+    ),
+}
+
 
 # extraer canonical y og:image
 def extract_meta(url, html):
@@ -60,13 +104,15 @@ SEP_PAT = re.compile(r"\s*(\||-|—|–|·|•|:|::)\s*")
 def clean_title(raw):
     if not raw:
         return "Actualización"
-    # quita prefijos tipo OPINIÓN:
     raw = re.sub(r"^\s*opini[oó]n\s*:\s*", "", raw, flags=re.I)
-    parts = SEP_PAT.split(raw)
-    if len(parts) >= 3:
-        raw = parts[0]
+    raw = re.sub(r"\s*(\||—|–|:|·|•)\s*.*$", "", raw)  # corta cola tras separadores
     raw = re.sub(r"\s+", " ", raw).strip()
-    return raw[:140].strip().capitalize()
+    if len(raw) > 65:
+        cut = raw[:65]
+        cut = re.sub(r"\s+\S*$", "", cut)  # no cortar palabra
+        raw = cut
+    return raw[0].upper() + raw[1:]
+
 
 
 # Frases/fragmentos a eliminar (en minúsculas)
@@ -146,6 +192,87 @@ def clean_text(txt: str) -> str:
     body = re.sub(r"\.{3,}", ".", body)
     return body
 
+def quality_ok(text: str) -> bool:
+    if not text:
+        return False
+    if len(text) < 500:  # exige un mínimo real
+        return False
+    # ratio de líneas únicas (evita repeticiones/ruido)
+    lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
+    uniq = len(set(lines))
+    return (uniq / max(1, len(lines))) >= 0.7
+
+
+def domain_of(url: str) -> str:
+    try:
+        import urllib.parse
+        netloc = urllib.parse.urlparse(url).netloc.lower()
+        return netloc.split(":")[0]
+    except Exception:
+        return ""
+
+BIG_MEDIA = {
+    "semana.com","eltiempo.com","elespectador.com","larepublica.co",
+    "portafolio.co","wradio.com.co","caracol.com.co","bluradio.com",
+}
+
+CO_HINTS = ["colombia","bogotá","bogota","medellín","medellin","antioquia","cali",".co/"]
+LATAM_COUNTRIES = [
+    "argentina","bolivia","brasil","brasil","chile","colombia","costa rica","cuba","ecuador",
+    "el salvador","guatemala","honduras","méxico","mexico","nicaragua","panamá","panama","paraguay",
+    "perú","peru","república dominicana","uruguay","venezuela"
+]
+
+def infer_region(url: str, text: str) -> str:
+    u = url.lower(); t = text[:800].lower()
+    if u.endswith(".co") or any(h in u for h in CO_HINTS) or any(h in t for h in CO_HINTS):
+        return "CO"
+    if any(c in u for c in LATAM_COUNTRIES) or any(c in t for c in LATAM_COUNTRIES):
+        return "LATAM"
+    return "WORLD"
+
+TOPIC_KEYWORDS = {
+    "economia":  ["economía","economia","inflación","pib","crecimiento","empleo","banrep","minhacienda","macro"],
+    "finanzas":  ["tasa","crédito","cartera","banca","liquidez","usura","morosidad","riesgo","financiero"],
+    "pagos":     ["pagos","pos","qr","billetera","pse","adquirente","pasarela","pix","upi","cbdc","cdbc","visa","mastercard","redeban","nequi","swift"],
+    "emprende":  ["emprend","startup","pyme","cámara de comercio","camara de comercio","registro mercantil","rueda de negocios","aceleradora","incubadora"],
+    "proyectos": ["proyecto","inversión","inversion","capex","obra","megaproyecto","concesión","ani","fdn","publica privada","app "],
+    "judicial":  ["corte","tribunal","sentencia","tutela","demanda","sanción","sancion","proceso judicial"],
+    "tecnologia":["tecnología","tecnologia","ia","inteligencia artificial","nube","cloud","ciberseguridad","blockchain"],
+    "cripto":    ["bitcoin","btc","cripto","crypto","ethereum","eth","stablecoin"],
+    "politica":  ["congreso","decreto","ley","reglamenta","reforma","política pública","politica publica"],
+    "negocios":  ["negocio","adquisición","adquisicion","fusiones","alianza","joint venture","expansión","expansion"],
+    "cooperativas":["cooperativa","mutual","solidaria","finanzas solidarias"],
+    "comunidades":["comunidad","local","barrio","asociación","asociacion"],
+}
+
+def infer_topics(url: str, text: str) -> list:
+    u = url.lower(); t = text.lower()
+    found = set()
+    for k, kws in TOPIC_KEYWORDS.items():
+        if any(w in u for w in kws) or any(w in t for w in kws):
+            found.add(k)
+    if not found:
+        found.add("economia")
+    return list(found)
+
+def pretty_tags(topics: list, region: str) -> list:
+    mapping = {
+        "economia":"Economía","finanzas":"Finanzas","pagos":"Pagos","emprende":"Emprendimiento",
+        "proyectos":"Proyectos","judicial":"Judicial","tecnologia":"Tecnología","cripto":"Cripto",
+        "politica":"Política","negocios":"Negocios","cooperativas":"Cooperativas","comunidades":"Comunidades",
+    }
+    tags = [mapping.get(t, t.title()) for t in topics]
+    if region == "CO": tags.append("Colombia")
+    elif region == "LATAM": tags.append("América Latina")
+    else: tags.append("Mundo")
+    # quita duplicados preservando orden
+    seen=set(); out=[]
+    for x in tags:
+        if x not in seen:
+            seen.add(x); out.append(x)
+    return out
+
 def looks_like_directory(text: str) -> bool:
     """True si parece listado/índice (no artículo)."""
     if not text: 
@@ -160,7 +287,6 @@ def looks_like_directory(text: str) -> bool:
     if sum(1 for v in verbs if v in " " + text.lower() + " ") < 1: 
         return True
     return False
-
 
 def h(text): return hashlib.sha1(text.encode("utf-8", errors="ignore")).hexdigest()
 
@@ -206,28 +332,29 @@ def extract_article(url):
     except Exception:
         return ""
 
-def summarize_with_gemini(text, url):
-    """
-    Devuelve {title, summary, article} o None.
-    """
+def summarize_with_gemini(text, url, style="critico", main_domain=None):
     if not GEMINI_MODEL or not text:
         return None
+    style_rules = STYLES.get(style, STYLES["critico"])
+    src = main_domain or (url.split("//")[-1].split("/")[0])
 
     prompt = f"""
 Eres editor económico para comercios en Colombia/LATAM.
 Reescribe SIN copiar textual. Tono neutro. Entrega JSON: title, summary, article.
 
+Estilo: {style_rules}
+
 Reglas:
-- No incluyas licencias, avisos legales, ni disclaimers editoriales (Creative Commons, etc.).
-- No pongas fechas/horas en el título ni en el summary (ej.: 'Domingo, 10.08.2025/21:36').
-- Evita 'OPINIÓN:' en el título; si es opinión, ajusta a informativo neutral.
-- Evita citas largas; máximo una breve si aporta valor.
-- Puedes mencionar fuentes, de forma conversacional, parafraseada y periodística, profesional y a la vez fluida.
+- No incluyas licencias ni disclaimers (Creative Commons, etc.).
+- No pongas fechas/horas en título ni summary.
+- Evita 'OPINIÓN:' en el título; usa tono informativo.
+- Evita citas largas; una corta si aporta valor.
 - Título: 6–12 palabras, sin “| Nombre del medio”.
-- Summary: 150–250 palabras, 3–4 frases, con implicaciones prácticas.
-- Article: 300–600 palabras, 4–7 párrafos; cierra con:
+- Summary: 150–250 palabras, 3–4 frases, claras y accionables.
+- Article: 400–700 palabras, 5–8 párrafos; cierra con:
   "Qué vigilar" (3 bullets accionables).
-- No inventes datos; si falta, dilo sin suponer.
+- Cita la fuente principal UNA vez de forma profesional, por ejemplo: "según {src}".
+- No inventes datos; si falta info, dilo sin suponer.
 - Español (Colombia). Fuente: {url}
 
 TEXTO LIMPIO (parcial si es largo):
@@ -243,11 +370,12 @@ TEXTO LIMPIO (parcial si es largo):
             t = (data.get("title") or "").strip()
             s = (data.get("summary") or "").strip()
             a = (data.get("article") or "").strip()
-            if len(s) >= 140 and len(a) >= 300:
+            if len(s) >= 140 and len(a) >= 350:
                 return {"title": t, "summary": s, "article": a}
     except Exception:
         return None
     return None
+
 
 def guess_tags_from_url(url: str) -> list:
     u = url.lower()
@@ -316,7 +444,11 @@ def write_md(title, link, body, og_image="", ai=None, status="draft"):
         slug = f"{today}-{base_slug}-{h(title)[:6]}"
         p = CONTENT / f"{slug}.md"
 
-    auto_tags = guess_tags_from_url(link)
+    auto_tags = pretty_tags(ai.get("topics", []) if ai and ai.get("topics") else [], ai.get("region") if ai and ai.get("region") else "WORLD")
+    ...
+    "tags": auto_tags,
+
+    canonical = link
 
     fm = {
         "title": title,
@@ -327,6 +459,7 @@ def write_md(title, link, body, og_image="", ai=None, status="draft"):
         "risk": "bajo",
         "action": "Evaluar impacto en comisiones/operación.",
         "sources": [{"name": "Fuente", "url": link}],
+        "canonicalUrl": canonical,
     }
     if og_image:
         fm["image"] = {"src": og_image, "alt": title}
@@ -343,44 +476,161 @@ def run():
         feed = discover_feed(url)
         candidates = parse_feed(feed, limit=6) if feed else discover_articles_from_home(url, limit=4)
         
-        
+        POOL = []
         for title, link in candidates:
             if new_items >= MAX_NEW: 
                 break
+
             html, final_url = get_html(link)
             canon = final_url
-            og_image = ""
-
             if html:
-                canon, og_image = extract_meta(final_url, html)
-                canon = urllib.parse.urljoin(final_url, canon) if canon else final_url
-                if og_image:
-                    og_image = urllib.parse.urljoin(final_url, og_image)
-
-            key = h(title + canon)
-            if key in seen:
-                continue
-
-
-
-
+                canon, _og = extract_meta(final_url, html)   # ignoramos imagen OG
             source_url = canon or final_url
-            raw = extract_article(source_url)   # texto crudo
-            body = clean_text(raw)              # LIMPIEZA ANTES DE IA
+
+            raw = extract_article(source_url)
+            body = clean_text(raw)
             if not body or len(body) < 200:
                 continue
-            if looks_like_directory(body):      # SALTA índices/listados
+            if not quality_ok(body):
                 continue
 
-            ai = summarize_with_gemini(body, source_url)  # IA sobre texto limpio
-            write_md(title, source_url, body, og_image=og_image, ai=ai, status="draft")
+            dom = domain_of(source_url)
+            region = infer_region(source_url, body)
+            topics = infer_topics(source_url, body)
+            is_big = dom in BIG_MEDIA
+            POOL.append({
+                "title": title,
+                "url": source_url,
+                "body": body,
+                "domain": dom,
+                "region": region,     # "CO", "LATAM", "WORLD"
+                "topics": topics,     # ej. ["economia","finanzas"]
+                "is_big": is_big,
+            })
+            time.sleep(0.4)
 
-            seen.add(key)
-            new_items += 1
-            time.sleep(1)
 
     SEEN.write_text(json.dumps(sorted(list(seen))), encoding="utf-8")
     print(f"Drafts creados: {new_items}")
+
+MAX_NEW = 12
+
+# Índices
+by_region_topic = defaultdict(list)
+by_topic = defaultdict(list)
+non_big_by_topic_CO = defaultdict(list)
+for it in POOL:
+    for tp in it["topics"]:
+        by_topic[tp].append(it)
+        by_region_topic[(it["region"], tp)].append(it)
+        if it["region"] == "CO" and not it["is_big"]:
+            non_big_by_topic_CO[tp].append(it)
+
+def pick_one(lst, used):
+    for it in lst:
+        if it["url"] not in used:
+            used.add(it["url"])
+            return it
+    return None
+
+selected = []
+used = set()
+
+# 1) 2 temas con más publicaciones detectadas en CO (estilo crítico)
+top_CO_topics = sorted(
+    [(tp, len(by_region_topic[("CO", tp)])) for tp in by_topic.keys()],
+    key=lambda x: x[1], reverse=True
+)
+for tp, _n in top_CO_topics[:2]:
+    it = pick_one(by_region_topic[("CO", tp)], used)
+    if it: selected.append(("critico", it))
+    if len(selected) >= MAX_NEW: break
+
+# 2) 1 tema con más publicaciones en WORLD (estilo crítico)
+if len(selected) < MAX_NEW:
+    top_WORLD_topics = sorted(
+        [(tp, len(by_region_topic[("WORLD", tp)])) for tp in by_topic.keys()],
+        key=lambda x: x[1], reverse=True
+    )
+    if top_WORLD_topics:
+        tp, _n = top_WORLD_topics[0]
+        it = pick_one(by_region_topic[("WORLD", tp)], used)
+        if it: selected.append(("critico", it))
+
+# 3) 2 “silencios” en CO: ≥2 notas de no-grandes y 0 de grandes (estilo crítico)
+if len(selected) < MAX_NEW:
+    silencios = []
+    for tp, lst in non_big_by_topic_CO.items():
+        if len(lst) >= 2:
+            big_count = sum(1 for x in by_region_topic[("CO", tp)] if x["is_big"])
+            if big_count == 0:
+                silencios.append((tp, len(lst)))
+    for tp, _ in sorted(silencios, key=lambda x: x[1], reverse=True)[:2]:
+        it = pick_one(non_big_by_topic_CO[tp], used)
+        if it: selected.append(("critico", it))
+        if len(selected) >= MAX_NEW: break
+
+# 4) 1 Emprendimiento en CO
+if len(selected) < MAX_NEW:
+    it = pick_one(by_region_topic.get(("CO","emprende"), []), used)
+    if it: selected.append(("emprende", it))
+
+# 5) 1 Finanzas en CO
+if len(selected) < MAX_NEW:
+    it = pick_one(by_region_topic.get(("CO","finanzas"), []), used)
+    if it: selected.append(("finanzas", it))
+
+# 6) 1 Economía en CO
+if len(selected) < MAX_NEW:
+    it = pick_one(by_region_topic.get(("CO","economia"), []), used)
+    if it: selected.append(("economia", it))
+
+# 7) 1 Pagos/Fintech (CO si hay, si no LATAM/WORLD)
+if len(selected) < MAX_NEW:
+    it = (pick_one(by_region_topic.get(("CO","pagos"), []), used)
+          or pick_one(by_region_topic.get(("LATAM","pagos"), []), used)
+          or pick_one(by_region_topic.get(("WORLD","pagos"), []), used))
+    if it: selected.append(("pagos", it))
+
+# 8) 1 Proyectos/Inversiones en CO
+if len(selected) < MAX_NEW:
+    it = pick_one(by_region_topic.get(("CO","proyectos"), []), used)
+    if it: selected.append(("proyectos", it))
+
+# 9) + 2 slots extra para completar 12 (prioriza Tecnología CO y Judicial CO; luego CO generales)
+EXTRA_TARGETS = [("tecnologia","CO"), ("judicial","CO")]
+for tp, rg in EXTRA_TARGETS:
+    if len(selected) >= MAX_NEW: break
+    it = pick_one(by_region_topic.get((rg, tp), []), used)
+    if it: selected.append(("critico", it))
+
+# Relleno si aún faltan (prefiere CO, luego LATAM, luego WORLD)
+if len(selected) < MAX_NEW:
+    resto = [it for it in POOL if it["url"] not in used]
+    # ordena por preferencia región
+    order = {"CO":0, "LATAM":1, "WORLD":2}
+    resto.sort(key=lambda x: order.get(x["region"], 3))
+    for it in resto:
+        selected.append(("boletin", it))
+        used.add(it["url"])
+        if len(selected) >= MAX_NEW:
+            break
+
+# === Escribir: respeta budget de IA ===
+calls = 0
+for style, it in selected:
+    topics = it["topics"]; region = it["region"]; dom = it["domain"]
+    ai = None
+    if calls < GEMINI_BUDGET:
+        ai = summarize_with_gemini(it["body"], it["url"], style=style, main_domain=dom)
+        calls += 1
+        # añade topics/region a lo que pasa a write_md (para tags bonitos)
+        if ai is not None:
+            ai["topics"] = topics
+            ai["region"] = region
+    # sin imagen OG
+    write_md(it["title"], it["url"], it["body"], og_image="", ai=ai, status="draft")
+
 
 if __name__ == "__main__":
     run()

@@ -1,0 +1,41 @@
+name: Build KPIs JSON
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"   # cada 30 minutos (en UTC)
+  workflow_dispatch:          # para correrlo manual cuando quieras
+jobs:
+  kpis:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: kpis
+      cancel-in-progress: true
+    permissions:
+      contents: write   # para commitear kpis.json
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          pip install yfinance
+
+      - name: Build KPIs JSON
+        run: |
+          python scripts/kpis.py
+
+      - name: Commit KPIs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/kpis.json
+          if git diff --cached --quiet; then
+            echo "Sin cambios."
+          else
+            git commit -m "data(kpis): actualizar kpis.json"
+            git push
+          fi

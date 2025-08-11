@@ -1,0 +1,27 @@
+---
+export interface Props {
+  href: string;
+  title: string;
+  date: Date;
+  description?: string;
+  action?: string;
+  image?: { src: string; alt?: string };
+  tags?: string[];
+}
+const { href, title, date, description, action, image, tags = [] } = Astro.props;
+---
+<article style="border:1px solid #eee;border-radius:14px;padding:16px;display:flex;gap:16px;align-items:flex-start;">
+  {image?.src && (
+    <a href={href} style="flex:0 0 140px;display:block;overflow:hidden;border-radius:12px;">
+      <img src={image.src} alt={image.alt || title} loading="lazy" style="width:140px;height:90px;object-fit:cover;display:block;" />
+    </a>
+  )}
+  <div style="flex:1 1 auto;">
+    <a href={href} style="text-decoration:none;color:inherit;">
+      <h2 style="margin:0 0 .25rem 0; font-size:1.15rem; line-height:1.25;">{title}</h2>
+    </a>
+    <small style="color:#777;">{new Date(date).toLocaleDateString('es-CO')}{tags.length ? ` · ${tags.join(' · ')}` : ''}</small>
+    {description && <p style="margin:.5rem 0 0 0;color:#444;">{description}</p>}
+    {action && <p style="margin:.5rem 0 0 0;"><strong>Qué hacer hoy:</strong> {action}</p>}
+  </div>
+</article>

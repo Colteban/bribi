@@ -1,0 +1,26 @@
+---
+export interface Props {
+  href: string;
+  title: string;
+  description?: string;
+  image?: { src: string; alt?: string };
+  date?: Date;
+  tag?: string;
+}
+const { href, title, description, image, date, tag } = Astro.props;
+---
+<a href={href} style="display:block; position:relative; border-radius:16px; overflow:hidden; min-height:300px; background:#111;">
+  {image?.src ? (
+    <img src={image.src} alt={image.alt || title} loading="lazy"
+      style="width:100%; height:420px; object-fit:cover; display:block;" />
+  ) : (
+    <div style="height:420px; background:linear-gradient(135deg,#0ea5e9,#1e3a8a);"></div>
+  )}
+  <div style="position:absolute; inset:0; background:linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.6));"></div>
+  <div style="position:absolute; left:16px; right:16px; bottom:16px; color:#fff;">
+    {tag && <span style="background:rgba(0,0,0,.4); padding:6px 10px; border-radius:999px; font-size:.8rem;">{tag}</span>}
+    <h2 style="margin:.5rem 0 .25rem 0; font-size:1.6rem; line-height:1.2;">{title}</h2>
+    {description && <p style="margin:.25rem 0 0 0; max-width:900px; opacity:.95;">{description}</p>}
+    {date && <small style="opacity:.85;">{new Date(date).toLocaleDateString('es-CO')}</small>}
+  </div>
+</a>

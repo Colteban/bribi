@@ -3,47 +3,159 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { getCollection } from 'astro:content';
+import HeroCard from '../components/HeroCard.astro';
+import NewsCardCompact from '../components/NewsCardCompact.astro';
+import NewsCard from '../components/NewsCard.astro';
+import KpiStrip from '../components/KpiStrip.astro';
+
+
+// Carga solo publicados, más nuevos primero
+const all = (await getCollection('blog', ({ data }) => data.status === 'published'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// Elegir destacado: 1) el primer featured=true, 2) si no hay, el más reciente con imagen, 3) en su defecto, el más reciente
+let featured = all.find(p => p.data.featured === true) 
+  ?? all.find(p => p.data.image?.src) 
+  ?? all[0];
+
+// Secundarias: las 3 siguientes al destacado
+const secondary = all.filter(p => p && featured && p.id !== featured.id).slice(0, 3);
+
+// Secciones por tema
+function byTag(tag) {
+  return all.filter(p => (p.data.tags || []).map(t => t.toLowerCase()).includes(tag.toLowerCase())).slice(0, 6);
+}
+const economia = byTag('economía').length ? byTag('economía') : byTag('economia');
+const pagos    = byTag('pagos');
+const normativa= byTag('normativa');
+const pyme     = byTag('pyme');
 ---
 
 <!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
+<html lang="es">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <style>
+      @media (min-width: 900px) {
+        .grid-hero { display:grid; grid-template-columns: 2fr 1fr; gap: 18px; }
+        .grid-sec  { display:grid; gap: 12px; }
+      }
+      .section { margin: 2rem 0; }
+      .section h2 { margin: 0 0 .75rem 0; }
+      .cards { display:grid; gap: 12px; }
+      @media (min-width: 800px) {.cards { grid-template-columns: 1fr 1fr; }}
+    </style>
+  </head>
+  <body>
+    <Header />
+    <KpiStrip />
+    <main style="max-width: 1100px; margin: 1.5rem auto 2.5rem auto; padding: 0 1rem;">
+      <!-- Bloque héroe + secundarias -->
+      <section class="grid-hero">
+        <div>
+          {featured ? (
+            <HeroCard
+              href={`/blog/${featured.slug}/`}
+              title={featured.data.title}
+              description={featured.data.description}
+              image={featured.data.image}
+              date={featured.data.pubDate}
+              tag={(featured.data.tags || [])[0]}
+            />
+          ) : (
+            <p>Aún no hay publicaciones destacadas.</p>
+          )}
+        </div>
+        <div class="grid-sec">
+          {secondary.map((p) => (
+            <NewsCardCompact
+              href={`/blog/${p.slug}/`}
+              title={p.data.title}
+              image={p.data.image}
+              date={p.data.pubDate}
+            />
+          ))}
+        </div>
+      </section>
+
+      <!-- Secciones por temas -->
+      {economia.length > 0 && (
+        <section class="section">
+          <h2>Economía</h2>
+          <div class="cards">
+            {economia.map((p) => (
+              <NewsCard
+                href={`/blog/${p.slug}/`}
+                title={p.data.title}
+                date={p.data.pubDate}
+                description={p.data.description}
+                action={p.data.action}
+                image={p.data.image}
+                tags={p.data.tags}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {pagos.length > 0 && (
+        <section class="section">
+          <h2>Pagos</h2>
+          <div class="cards">
+            {pagos.map((p) => (
+              <NewsCard
+                href={`/blog/${p.slug}/`}
+                title={p.data.title}
+                date={p.data.pubDate}
+                description={p.data.description}
+                action={p.data.action}
+                image={p.data.image}
+                tags={p.data.tags}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {normativa.length > 0 && (
+        <section class="section">
+          <h2>Normativa</h2>
+          <div class="cards">
+            {normativa.map((p) => (
+              <NewsCard
+                href={`/blog/${p.slug}/`}
+                title={p.data.title}
+                date={p.data.pubDate}
+                description={p.data.description}
+                action={p.data.action}
+                image={p.data.image}
+                tags={p.data.tags}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {pyme.length > 0 && (
+        <section class="section">
+          <h2>Pyme</h2>
+          <div class="cards">
+            {pyme.map((p) => (
+              <NewsCard
+                href={`/blog/${p.slug}/`}
+                title={p.data.title}
+                date={p.data.pubDate}
+                description={p.data.description}
+                action={p.data.action}
+                image={p.data.image}
+                tags={p.data.tags}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+    </main>
+    <Footer />
+  </body>
 </html>

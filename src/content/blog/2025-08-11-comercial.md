@@ -20,7 +20,7 @@ tags:
 - comercial
 - normativa
 - pyme
-status: draft
+status: published
 risk: bajo
 action: Evaluar impacto en comisiones/operación.
 sources:

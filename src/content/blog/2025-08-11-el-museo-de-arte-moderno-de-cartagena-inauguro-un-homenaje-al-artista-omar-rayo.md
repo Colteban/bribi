@@ -16,7 +16,7 @@ description: 'Escucha este artículo
 pubDate: '2025-08-11'
 tags:
 - economía
-status: draft
+status: published
 risk: bajo
 action: Evaluar impacto en comisiones/operación.
 sources:

@@ -153,3 +153,14 @@ hr {
 	/* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
 	white-space: nowrap;
 }
+
+:root {
+  --bg:#ffffff; --fg:#111111; --muted:#666; --card:#ffffff; --border:#eaeaea;
+}
+:root[data-theme="dark"]{
+  --bg:#0f1115; --fg:#e8e8e8; --muted:#aaa; --card:#151820; --border:#2a2e36;
+}
+body { background:var(--bg); color:var(--fg); }
+.site-header, .site-footer, .card { background:var(--card); border-color:var(--border); }
+.section-title { color:var(--fg); }
+

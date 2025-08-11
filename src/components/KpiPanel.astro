@@ -1,0 +1,107 @@
+---
+/** Lee /kpis.json que actualiza tu workflow (cada 30 min). */
+const KPIS_URL = "/kpis.json";
+/** Orden y etiquetas que quieres mostrar */
+const LABELS: Record<string,string> = {
+  "BTCUSD": "BTC/USD",
+  "BTCCOP": "BTC/COP",
+  "USDCOP": "USD/COP",
+  "COFFEE": "Café",
+  "GOLD": "Oro",
+  "COLCAP": "COLCAP",
+  "SP500": "S&P 500",
+};
+---
+
+<aside class="kpi-panel" aria-label="Indicadores">
+  <div class="kpi-row" id="kpiRow">
+    {Object.entries(LABELS).map(([k, label]) => (
+      <div class="kpi" data-key={k}>
+        <div class="kpi-label">{label}</div>
+        <div class="kpi-value" data-v={k}>—</div>
+        <div class="kpi-delta" data-d={k}></div>
+      </div>
+    ))}
+  </div>
+</aside>
+
+<script>
+const url = {KPIS_URL};
+const labels = {LABELS};
+
+async function loadKpis(){
+  try {
+    const r = await fetch(url, { cache: "no-store" });
+    if(!r.ok) return;
+    const data = await r.json(); // { BTCUSD: {value: n, delta: n}, ... }
+
+    Object.keys(labels).forEach(k=>{
+      const vEl = document.querySelector(`[data-v="${k}"]`);
+      const dEl = document.querySelector(`[data-d="${k}"]`);
+      const it = data[k] || {};
+      const v = it.value ?? it.price ?? it.last ?? null;
+      const d = it.delta ?? it.change ?? null;
+      if(vEl) vEl.textContent = (v!=null) ? String(v) : "—";
+      if(dEl){
+        if(d==null){ dEl.textContent=""; dEl.removeAttribute("data-up"); dEl.removeAttribute("data-down"); }
+        else {
+          const up = Number(d) >= 0;
+          dEl.textContent = (up? "▲ ":"▼ ") + String(d);
+          dEl.toggleAttribute("data-up", up);
+          dEl.toggleAttribute("data-down", !up);
+        }
+      }
+    });
+  } catch(e){}
+}
+loadKpis();
+setInterval(loadKpis, 60_000); // refresca cada minuto
+</script>
+
+<style>
+.kpi-panel {
+  background: #fff;
+  border: 1px solid var(--ui-border, #eaeaea);
+  border-radius: 10px;
+  padding: 8px;
+  position: sticky;
+  top: 12px;
+  max-height: calc(100vh - 24px);
+  overflow: auto;
+}
+
+/* móvil: tira horizontal compacta */
+.kpi-row {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(120px, 1fr);
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.kpi {
+  border: 1px solid var(--ui-border, #eee);
+  border-radius: 10px;
+  padding: 7px;
+  min-width: 120px;
+  background: #fafafa;
+}
+.kpi-label { font-size: 10px; color:#666; }
+.kpi-value { font-weight: 700; font-size: 13 px; margin-top: 2px; }
+.kpi-delta { font-size: 12px; margin-top: 2px; color:#666; }
+.kpi-delta[data-up] { color: #1a7f37; }
+.kpi-delta[data-down] { color: #b42318; }
+
+@media (min-width: 1024px){
+  /* desktop: se apila vertical en la barra derecha */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-flow: row;
+    grid-auto-rows: auto;
+    overflow: visible;
+  }
+  .kpi { min-width: auto; }
+}
+</style>

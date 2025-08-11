@@ -1,27 +1,29 @@
 ---
 export interface Props {
-  href: string;
-  title: string;
-  date: Date;
-  description?: string;
-  action?: string;
-  image?: { src: string; alt?: string };
-  tags?: string[];
+  url: string; title: string; description?: string; pubDate?: Date;
+  tags?: string[]; compact?: boolean;
 }
-const { href, title, date, description, action, image, tags = [] } = Astro.props;
+const { url, title, description, pubDate, tags = [], compact = false } = Astro.props;
 ---
-<article style="border:1px solid #eee;border-radius:14px;padding:16px;display:flex;gap:16px;align-items:flex-start;">
-  {image?.src && (
-    <a href={href} style="flex:0 0 140px;display:block;overflow:hidden;border-radius:12px;">
-      <img src={image.src} alt={image.alt || title} loading="lazy" style="width:140px;height:90px;object-fit:cover;display:block;" />
-    </a>
-  )}
-  <div style="flex:1 1 auto;">
-    <a href={href} style="text-decoration:none;color:inherit;">
-      <h2 style="margin:0 0 .25rem 0; font-size:1.15rem; line-height:1.25;">{title}</h2>
-    </a>
-    <small style="color:#777;">{new Date(date).toLocaleDateString('es-CO')}{tags.length ? ` · ${tags.join(' · ')}` : ''}</small>
-    {description && <p style="margin:.5rem 0 0 0;color:#444;">{description}</p>}
-    {action && <p style="margin:.5rem 0 0 0;"><strong>Qué hacer hoy:</strong> {action}</p>}
+
+<article class={`card ${compact ? "compact": ""}`} data-tags={tags.join(",")}>
+  <a class="title" href={url}>{title}</a>
+  {description && <p class="desc">{description}</p>}
+  <div class="meta">
+    {pubDate && <time datetime={pubDate.toISOString()}>{pubDate.toLocaleDateString("es-CO")}</time>}
+    <div class="tags">
+      {tags.slice(0,3).map((t) => <span class="tag">{t}</span>)}
+    </div>
   </div>
 </article>
+
+<style>
+.card { border:1px solid var(--ui-border,#eee); border-radius:12px; padding:12px; background:#fff; }
+.title { display:block; font-weight:700; color:#111; text-decoration:none; line-height:1.2; }
+.title:hover { text-decoration:underline; }
+.desc { color:#444; margin:6px 0 8px; font-size:14px; }
+.meta { display:flex; justify-content:space-between; align-items:center; gap:8px; }
+.meta time { color:#666; font-size:12px; }
+.tag { display:inline-block; padding:2px 8px; border-radius:999px; background:#f2f2f2; color:#333; font-size:11px; }
+.compact .desc { display:none; }
+</style>

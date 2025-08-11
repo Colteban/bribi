@@ -25,6 +25,9 @@ const blog = defineCollection({
 	      }).optional(),
 
 
+	      // NUEVO: URL canónica de la fuente (la escribe el robot)
+	      canonicalUrl: z.string().url().optional(),
+
 	      // NUEVO: lo que escribe el robot
 	      status: z.enum(['draft','published']).default('draft'),
 	      tags: z.array(z.string()).default([]),

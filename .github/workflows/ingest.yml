@@ -24,7 +24,7 @@ jobs:
 
       - name: Install deps
         run: |
-          pip install feedparser trafilatura requests beautifulsoup4 pyyaml
+          pip install feedparser trafilatura requests beautifulsoup4 pyyaml google-generativeai
 
       - name: Run ingestor
         env:

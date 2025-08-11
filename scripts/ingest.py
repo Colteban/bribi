@@ -3,6 +3,15 @@ import os, json, hashlib, datetime, re, pathlib, yaml, time, urllib.parse, unico
 import feedparser, trafilatura, requests
 from bs4 import BeautifulSoup
 
+import google.generativeai as genai
+GEMINI_KEY = os.getenv("GEMINI_API_KEY")
+if GEMINI_KEY:
+    genai.configure(api_key=GEMINI_KEY)
+    GEMINI_MODEL = genai.GenerativeModel("gemini-1.5-flash")
+else:
+    GEMINI_MODEL = None
+
+
 # Detecta la raíz del repo (GitHub Actions expone GITHUB_WORKSPACE)
 REPO_ROOT = pathlib.Path(os.getenv("GITHUB_WORKSPACE") or pathlib.Path(__file__).resolve().parents[1]).resolve()
 CONTENT = REPO_ROOT / "src" / "content" / "blog"
@@ -149,6 +158,47 @@ def extract_article(url):
     except Exception:
         return ""
 
+def summarize_with_gemini(text, url):
+    """
+    Devuelve dict con: {title, summary, article} o None si falla.
+    - title: 6–12 palabras, sin el nombre del medio.
+    - summary: 150–250 palabras (3–4 frases), claro y accionable.
+    - article: 300–600 palabras; termina con bloque "Qué vigilar" (3 bullets).
+    """
+    if not GEMINI_MODEL or not text:
+        return None
+
+    prompt = f"""
+Eres editor económico para comercios en Colombia/LATAM.
+Reescribe SIN copiar textual. Tono neutro. Entrega JSON: title, summary, article.
+
+Reglas:
+- Título: 6–12 palabras, sin “| Nombre del medio”.
+- Summary: 150–250 palabras, 3–4 frases, con implicaciones y claridad.
+- Article: 300–600 palabras, 4–7 párrafos, cierra con bloque:
+  "Qué vigilar" (3 bullets accionables).
+- No inventes datos. Si falta algo, no lo supongas.
+- Español (Colombia). Fuente: {url}
+
+TEXTO LIMPIO (parcial si es largo):
+{text[:9000]}
+"""
+    try:
+        r = GEMINI_MODEL.generate_content(prompt)
+        raw = (r.text or "").strip()
+        import json
+        i, j = raw.find("{"), raw.rfind("}")
+        if i != -1 and j != -1:
+            data = json.loads(raw[i:j+1])
+            t = (data.get("title") or "").strip()
+            s = (data.get("summary") or "").strip()
+            a = (data.get("article") or "").strip()
+            # mínimos de calidad
+            if len(s) >= 140 and len(a) >= 300:
+                return {"title": t, "summary": s, "article": a}
+    except Exception:
+        return None
+    return None
 
 def parse_feed(feed_url, limit=8):
     items = []
@@ -180,11 +230,16 @@ def discover_articles_from_home(home_url, limit=5):
     return links
 
 
-def write_md(title, link, body, og_image=""):
+def write_md(title, link, body, og_image="", ai=None, status="draft"):
     today = datetime.date.today().isoformat()
-    title = clean_title(title)
-    body = clean_text(body)
-    if not body or len(body) < 200:
+
+    # Si hay IA, úsala; si no, usa lo que ya tenías
+    title = clean_title(ai["title"] if ai and ai.get("title") else title)
+    summary = ai["summary"] if ai and ai.get("summary") else (body[:250] + "..." if len(body) > 250 else body)
+    article_md = ai["article"] if ai and ai.get("article") else body
+
+    # mínimo de calidad
+    if not article_md or len(article_md) < 200:
         return
     base_slug = slugify(title)
     slug = f"{today}-{base_slug}"
@@ -209,9 +264,8 @@ def write_md(title, link, body, og_image=""):
         fm["image"] = {"src": og_image, "alt": title}
 
     CONTENT.mkdir(parents=True, exist_ok=True)
-    md = "---\n" + yaml.safe_dump(fm, allow_unicode=True, sort_keys=False) + "---\n" + (body or "Contenido por revisar.")
+    md = "---\n" + yaml.safe_dump(fm, allow_unicode=True, sort_keys=False) + "---\n" + article_md.strip()
     p.write_text(md, encoding="utf-8")
-
 
 def run():
     urls = [u.strip() for u in FEEDS_FILE.read_text(encoding="utf-8").splitlines() if u.strip() and not u.strip().startswith("#")]
@@ -245,7 +299,8 @@ def run():
             if not body or len(body) < 200:   # usa 200 si quieres que entre más material (antes tenías 300)
                 continue
 
-            write_md(title, source_url, body, og_image=og_image)
+            ai = summarize_with_gemini(body, source_url)  # puede ser None si falla o si no hay clave
+            write_md(title, source_url, body, og_image=og_image, ai=ai, status="draft")
             seen.add(key)
             new_items += 1
             time.sleep(1)

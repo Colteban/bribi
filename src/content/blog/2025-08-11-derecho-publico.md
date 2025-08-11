@@ -17,7 +17,7 @@ description: 'Este es el acuerdo internacional para desalentar la pesca ilegal
 pubDate: '2025-08-11'
 tags:
 - normativa
-status: draft
+status: published
 risk: bajo
 action: Evaluar impacto en comisiones/operación.
 sources:

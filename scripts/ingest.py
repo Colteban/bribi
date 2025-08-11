@@ -475,6 +475,113 @@ def write_md(title, link, body, og_image="", ai=None, status="draft"):
     md = "---\n" + yaml.safe_dump(fm, allow_unicode=True, sort_keys=False) + "---\n" + article_md.strip()
     p.write_text(md, encoding="utf-8")
 
+def _parse_feed_items(xml_text: str, base_url: str):
+    """Devuelve [(title, link), ...] desde un XML RSS/Atom."""
+    items = []
+    soup = BeautifulSoup(xml_text, "xml")
+
+    # RSS <item>
+    for it in soup.find_all("item"):
+        title = it.title.get_text(strip=True) if it.title else ""
+        link = ""
+        if it.link:
+            # algunos RSS traen <link> como texto
+            link = it.link.get_text(strip=True)
+        if not link and it.guid and (it.guid.get("isPermaLink") in (True, "true")):
+            link = it.guid.get_text(strip=True)
+        if title and link:
+            link = urllib.parse.urljoin(base_url, link)
+            items.append((title, link))
+
+    # Atom <entry>
+    for e in soup.find_all("entry"):
+        title = e.title.get_text(strip=True) if e.title else ""
+        link = ""
+        for lk in e.find_all("link"):
+            rel = lk.get("rel", "")
+            if not rel or "alternate" in rel:
+                href = lk.get("href")
+                if href:
+                    link = urllib.parse.urljoin(base_url, href)
+                    break
+        if not link and e.id:
+            link = e.id.get_text(strip=True)
+        if title and link:
+            items.append((title, link))
+
+    return items
+
+
+def _discover_feed_url(page_html: str, page_url: str):
+    """Si te pasan una página HTML, intenta encontrar el <link rel='alternate' ...> del feed."""
+    soup = BeautifulSoup(page_html, "html.parser")
+    # busca RSS o Atom
+    link = soup.find("link", rel=lambda r: r and "alternate" in r,
+                     type=lambda t: t and ("rss" in t or "atom" in t or "xml" in t))
+    if link and link.get("href"):
+        return urllib.parse.urljoin(page_url, link["href"])
+    return None
+
+
+def discover_candidates(feeds_file_path, max_per_feed=20, overall_limit=200):
+    """
+    Lee data/feeds.txt, intenta encontrar RSS/Atom para cada URL y devuelve [(title, link), ...].
+    - max_per_feed: tope por feed
+    - overall_limit: tope global (para no traer miles)
+    """
+    candidates = []
+
+    # 1) lee las URLs del archivo
+    try:
+        if hasattr(feeds_file_path, "read_text"):
+            lines = feeds_file_path.read_text(encoding="utf-8").splitlines()
+        else:
+            with open(feeds_file_path, "r", encoding="utf-8") as f:
+                lines = f.read().splitlines()
+    except Exception:
+        lines = []
+
+    urls = [u.strip() for u in lines if u.strip() and not u.strip().startswith("#")]
+
+    # 2) procesa cada URL
+    for url in urls:
+        html, final_url = get_html(url)
+        if not html:
+            continue
+
+        # ¿ya es un feed (tiene <rss ...> o <feed ...>)?
+        is_xml_like = ("<rss" in html.lower()) or ("<feed" in html.lower())
+        feed_xml = None
+
+        if is_xml_like:
+            feed_xml = html
+            feed_base = final_url
+        else:
+            # intenta descubrir el <link rel="alternate" type="application/rss+xml|atom+xml">
+            feed_url = _discover_feed_url(html, final_url)
+            if feed_url:
+                xml_text, xml_final = get_html(feed_url)
+                if xml_text:
+                    feed_xml = xml_text
+                    feed_base = xml_final or feed_url
+
+        # si no encontramos feed, intenta parsear como si fuera RSS/Atom de todos modos (algunos sitios devuelven XML con content-type raro)
+        if not feed_xml:
+            if is_xml_like:
+                feed_xml = html
+                feed_base = final_url
+            else:
+                continue  # no hay feed detectable
+
+        # 3) extrae items y acumula
+        items = _parse_feed_items(feed_xml, feed_base)
+        for t, l in items[:max_per_feed]:
+            candidates.append((t, l))
+
+        if len(candidates) >= overall_limit:
+            break
+
+    return candidates[:overall_limit]
 
 
 

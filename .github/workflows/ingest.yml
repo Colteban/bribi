@@ -28,7 +28,8 @@ jobs:
 
       - name: Run ingestor
         env:
-          MAX_NEW: "8"  # tope por corrida (ajústalo si quieres)
+          MAX_NEW: "12"
+          GEMINI_BUDGET: "10"   # si quieres 10 con IA + 2 sin IA
         run: |
           python scripts/ingest.py
 

@@ -423,20 +423,23 @@ def discover_articles_from_home(home_url, limit=5):
 def write_md(title, link, body, og_image="", ai=None, status="draft"):
     today = datetime.date.today().isoformat()
 
+    # título (SEO, usando IA si hay)
     title = clean_title(ai["title"] if ai and ai.get("title") else title)
 
-    # summary limpio (sin cortar palabras y sin "..." extra)
+    # summary limpio (sin cortar palabra y sin "..." extra)
     if ai and ai.get("summary"):
         summary = ai["summary"].strip()
     else:
         trimmed = body[:300]
         trimmed = re.sub(r"\s+\S*$", "", trimmed)   # corta en palabra
-        summary = trimmed if len(body) <= 300 else trimmed + "…"  # una sola elipsis
+        summary = trimmed if len(body) <= 300 else trimmed + "…"
 
+    # contenido (IA si hay, si no el body limpio)
     article_md = ai["article"] if ai and ai.get("article") else body
     if not article_md or len(article_md) < 200:
         return
 
+    # slug único
     base_slug = slugify(title)
     slug = f"{today}-{base_slug}"
     p = CONTENT / f"{slug}.md"
@@ -444,12 +447,15 @@ def write_md(title, link, body, og_image="", ai=None, status="draft"):
         slug = f"{today}-{base_slug}-{h(title)[:6]}"
         p = CONTENT / f"{slug}.md"
 
-    auto_tags = pretty_tags(ai.get("topics", []) if ai and ai.get("topics") else [], ai.get("region") if ai and ai.get("region") else "WORLD")
-    ...
-    "tags": auto_tags,
+    # tags bonitos desde topics/region (si no hay IA, usa defaults)
+    topics = (ai.get("topics") if ai and ai.get("topics") else [])
+    region = (ai.get("region") if ai and ai.get("region") else "WORLD")
+    auto_tags = pretty_tags(topics, region)
 
+    # canonical siempre al link de la fuente (ya lo calculaste al procesar)
     canonical = link
 
+    # FRONTMATTER — ojo a comas y llaves
     fm = {
         "title": title,
         "description": summary,
@@ -468,6 +474,7 @@ def write_md(title, link, body, og_image="", ai=None, status="draft"):
     p.write_text(md, encoding="utf-8")
 
 
+
 def run():
     urls = [u.strip() for u in FEEDS_FILE.read_text(encoding="utf-8").splitlines() if u.strip() and not u.strip().startswith("#")]
     new_items = 0
@@ -483,6 +490,7 @@ def run():
 
             html, final_url = get_html(link)
             canon = final_url
+            og_image = ""  # no reusar imágenes OG de la fuente
             if html:
                 canon, _og = extract_meta(final_url, html)   # ignoramos imagen OG
             source_url = canon or final_url
@@ -513,7 +521,7 @@ def run():
     SEEN.write_text(json.dumps(sorted(list(seen))), encoding="utf-8")
     print(f"Drafts creados: {new_items}")
 
-MAX_NEW = 12
+MAX_NEW = int(os.getenv("MAX_NEW", "12"))
 
 # Índices
 by_region_topic = defaultdict(list)
@@ -629,7 +637,14 @@ for style, it in selected:
             ai["topics"] = topics
             ai["region"] = region
     # sin imagen OG
-    write_md(it["title"], it["url"], it["body"], og_image="", ai=ai, status="draft")
+    write_md(
+        it["title"],
+        it["url"],          # <- ya guardamos la canónica en "url" al llenar el POOL
+        it["body"],
+        og_image="",        # <- no reutilizamos OG
+        ai=ai,
+        status="draft"
+    )
 
 
 if __name__ == "__main__":

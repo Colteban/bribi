@@ -1,0 +1,66 @@
+---
+interface KpiItem {
+  key: string; label: string; fmt?: (n:number)=>string;
+}
+const items: KpiItem[] = [
+  { key: "BTCUSD", label: "BTC/USD", fmt: (n)=> n.toLocaleString('en-US',{maximumFractionDigits:0}) },
+  { key: "BTCCOP", label: "BTC/COP", fmt: (n)=> n.toLocaleString('es-CO',{maximumFractionDigits:0}) },
+  { key: "USDCOP", label: "USD/COP", fmt: (n)=> n.toLocaleString('es-CO',{maximumFractionDigits:0}) },
+  { key: "COFFEE", label: "Café (¢/lb)" , fmt: (n)=> n.toLocaleString('en-US',{maximumFractionDigits:2}) },
+  { key: "GOLD",   label: "Oro (USD/oz)", fmt: (n)=> n.toLocaleString('en-US',{maximumFractionDigits:2}) },
+  { key: "COLCAP", label: "COLCAP", fmt: (n)=> n.toLocaleString('es-CO',{maximumFractionDigits:2}) },
+  { key: "SP500",  label: "S&P 500", fmt: (n)=> n.toLocaleString('en-US',{maximumFractionDigits:2}) },
+];
+---
+
+<section style="position:sticky; top:0; z-index:5; background:#0b1220; color:#fff; border-bottom:1px solid #0f1a33;">
+  <div style="max-width:1100px; margin:0 auto; padding:.5rem 1rem; display:flex; gap:16px; overflow:auto;">
+    {items.map((it)=> (
+      <div style="display:flex; gap:6px; align-items:baseline; white-space:nowrap; font-variant-numeric: tabular-nums;">
+        <span style="opacity:.8;">{it.label}:</span>
+        <strong id={`kpi-${it.key}`} style="min-width:80px; display:inline-block; text-align:right;">—</strong>
+      </div>
+    ))}
+    <div style="margin-left:auto; opacity:.7;">
+      <small id="kpi-updated">Actualizando…</small>
+    </div>
+  </div>
+
+  <script>
+    (async () => {
+      try {
+        const res = await fetch('/kpis.json', { cache: 'no-cache' });
+        if (!res.ok) throw new Error('no kpis');
+        const data = await res.json();
+        const vals = data.values || {};
+        const updated = data.timestamp ? new Date(data.timestamp) : null;
+
+        const fmt = (n, key) => {
+          if (n == null) return '—';
+          try {
+            switch (key) {
+              case 'BTCUSD': return n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+              case 'BTCCOP':
+              case 'USDCOP': return n.toLocaleString('es-CO', { maximumFractionDigits: 0 });
+              case 'COFFEE':
+              case 'GOLD':
+              case 'SP500':
+              case 'COLCAP': return n.toLocaleString('es-CO', { maximumFractionDigits: 2 });
+              default: return String(n);
+            }
+          } catch { return String(n); }
+        };
+
+        for (const key in vals) {
+          const el = document.getElementById('kpi-' + key);
+          if (el) el.textContent = fmt(vals[key], key);
+        }
+        const up = document.getElementById('kpi-updated');
+        if (up && updated) up.textContent = 'Actualizado: ' + updated.toLocaleString('es-CO');
+      } catch (e) {
+        const up = document.getElementById('kpi-updated');
+        if (up) up.textContent = 'KPIs no disponibles';
+      }
+    })();
+  </script>
+</section>

@@ -10,7 +10,7 @@ description: '- El sistema financiero colombiano cuenta, en la actualidad, con l
 pubDate: '2025-08-11'
 tags:
 - Mundo
-status: draft
+status: published
 risk: bajo
 action: Evaluar impacto en comisiones/operación.
 sources:

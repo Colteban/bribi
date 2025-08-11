@@ -3,6 +3,8 @@ import os, json, hashlib, datetime, re, pathlib, yaml, time, urllib.parse, unico
 import feedparser, trafilatura, requests
 from collections import defaultdict
 from bs4 import BeautifulSoup
+from pathlib import Path
+
 
 import google.generativeai as genai
 GEMINI_KEY = os.getenv("GEMINI_API_KEY")

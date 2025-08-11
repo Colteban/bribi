@@ -479,6 +479,7 @@ def write_md(title, link, body, og_image="", ai=None, status="draft"):
 
 
 def run():
+    from pathlib import Path            # 👈 IMPORT DENTRO DE run() (obligatorio)
     import os, urllib.parse, time
     from collections import defaultdict
 

@@ -3,11 +3,14 @@ title: ACOPI propone acuerdo nacional para salvar la economía
 description: 'Bogotá, D.C., 14 de mayo de 2024. Esta mañana se conoció la respuesta
   de la Asociación Colombiana de las Micro, Pequeñas y Medias Empresas -ACOPI- a las
   propuestas planteadas por el Gobierno Nacional con miras a los mecanismos que se
-  deben adoptar para avanzar en el diálogo social.'
+  deben adoptar para avanzar en el diálogo social.
+
+
+  Desde el Gremio…'
 pubDate: '2025-08-11'
 tags:
 - Mundo
-status: published
+status: draft
 risk: bajo
 action: Evaluar impacto en comisiones/operación.
 sources:
@@ -32,3 +35,5 @@ En consecuencia, los empresarios Mipyme tienen mucho para aportar en esta discus
 - Alianza entre sector público y privado para definir la ruta de transformación tecnológica y digital de la Economía Nacional desde la Micro, Pequeña y Mediana Empresa.
 
 Finalmente, desde la presidencia ejecutiva y la Junta Directiva Nacional de ACOPI se expresa la disposición del Gremio para sentarse, de inmediato, a ayudar en la construcción colectiva no solo de la nueva iniciativa de reforma tributaria sino de todos las iniciativas gubernamentales y los proyectos legislativos que impacten a los micro, pequeños y medianos empresarios.
+
+Más información, solo para periodistas, con: Diana Villa, celular: 3104547094.

@@ -28,6 +28,56 @@ Luego de dos meses de estar batallando por su vida, Miguel Uribe Turbay murió a
 
 Uribe recibió tres disparos, dos en la cabeza y uno en la pierna izquierda. Pese a los esfuerzos médicos durante dos meses, el senador y precandidato no sobrevivió. El pasado sábado 9 de agosto, la Fundación Santa Fe, donde estaba hospitalizado, confirmó que el senador había tenido una hemorragia en su cerebro.
 
+Precandidatos lamentan muerte de Uribe Turbay
+
+Un número significativo de precandidatos presidenciales han lamentado el magnicidio de Miguel Uribe Turbay.
+
+Para empezar, los cuatro precandidatos del Centro Democrático ya se pronuncieron lamentando la muerte de su copartidario. La primera en hacerlo fue la senadora María Fernanda Cabal, quien aseguró que “Mi corazón y mis oraciones están con su familia y seres queridos. Que Dios les conceda fortaleza en este momento de inmensa tristeza. Colombia pierde hoy a un hombre íntegro, con todas las capacidades y el compromiso para ayudar a construir un mejor país. Dios lo reciba en su gloria y, desde donde esté, nos inspire a seguir reconstruyendo esta nación que hoy enfrenta nuevamente sus peores épocas de violencia”.
+
+Por su parte, la senadora Paloma Valencia dijo que “Colombia llora de pie. Jamás vencida. Unida y firme. Colombia puede más. No importa cuánto la ataquen: Colombia no cae. Y vamos a seguir y no vamos a parar hasta que la vida y la libertad triunfen siempre”.
+
+El senador Andrés Guerra afirmó: “Duele, Colombia. Miguel, atento, amable, inteligente, juicioso, estudioso, comprometido, honesto, franco, descomplicado, buen anfitrión, buen compañero. Te acompañé tres años en el Senado y recorrimos Colombia como precandidatos de nuestro”.
+
+Y la senadora Paola Holguín dijo: “Todas las oraciones para que Dios sea fuente de fortaleza y consuelo en un momento tan doloroso. Que Miguel desde el cielo guíe a Colombia y que su lucha sea ejemplo para las nuevas generaciones. A su Padre, su Esposa, su Hermana, sus Hijitos, y toda la familia un abrazo”.
+
+Por su parte, la precandidata y experiodista Vicky Dávila aseguró que “Miguel, ya estás en el cielo, toda Colombia te tiene en el corazón. Gracias por tu lucha. A la familia Uribe Turbay, todo el amor. Dios cuide a nuestro adolorido país”.
+
+Precandidatos de la centroderecha también se han manifestado. El exsenador y el exministro de las TIC de Petro, Mauricio Lizcano, aseguró que “la noticia del magnicidio contra Miguel Uribe es un hecho lamentable que enluta a todos los colombianos. Una herida más para nuestra pobre Colombia, en un espiral de violencia donde han muerto miles de compatriotas. Un momento para que nos unamos en oración, en especial por su familia: para Maria Claudia, sus hijos, sus hermanos, sus padres. Sentimos su dolor”.
+
+Desde la izquierda y el progresismo también hubo mensajes de solidaridad.
+
+Gustavo Bolívar, precandidato del Pacto Histórico, manifestó: “Independientemente de lo que pensemos y de la ideología que tengamos, debemos respetar profundamente al otro y lo que piensa. Hay que eliminar las diferencias como excusa para mantener una violencia que nos azota desde hace 76 años”.
+
+Y la senadora María José Pizarro manifestó: “Miguel Uribe Turbay representaba ideas distintas a las mías, pero su voz debía ser respetada en el escenario democrático. Minorías apátridas siguen asesinando, solo entienden el lenguaje de la violencia y buscan influir en los destinos de la nación con golpes de sangre”.
+
+Grupo de expresidentes Libertad y Democracia condenaron magnicidio de Uribe Turbay
+
+El Grupo Libertad y Democracia, que reúne a expresidentes de varios países de América Latina, condenó el magnicidio de Miguel Uribe Turbay, definiéndolo como un “líder íntegro y defensor de la democracia. Honraremos su legado con unidad, compromiso democrático y lucha por la libertad”.
+
+“Exigimos categóricamente el total esclarecimiento de este crimen, con investigaciones rápidas, independientes y exhaustivas que conduzcan a la identificación y sanción de todos los responsables”, indicaron los exmandatarios.
+
+“Miguel Uribe fue un firme y valiente defensor de la libertad, la institucionalidad y el fortalecimiento de las instituciones republicanas. Su integridad, vocación de servicio y compromiso con el bienestar de los colombianos dejan un legado que trasciende fronteras y que continuará inspirando a quienes creemos en la causa de la democracia y la dignidad humana”.
+
+Y añadieron: “Expresamos nuestra más sentidas condolencias a su esposa, hijos, familia y allegados, acompañándolos en este momento de profundo dolor”.
+
+El comunicado está firmado por, entre otros, los expresidentes Felipe Calderón (México), Iván Duque (Colombia), Guillermo Lasso (Ecuador), Mireya Moscoso (Panamá), Jorge Tuto Quiroga (Bolivia) y Jeanine Añéz (Bolivia).
+
+Los expresidentes y miembros del Grupo Libertad y Democracia (@GrupoLyD), condenamos con dolor y firmeza el cobarde magnicidio de Miguel Uribe Turbay, líder íntegro y defensor de la democracia. Este crimen atenta contra Colombia y toda Iberoamérica. Honraremos su legado con. pic.twitter.com/f82OMOc9tA
+
+— Iván Duque 🇨🇴 (@IvanDuque) August 11, 2025
+
+Estas fueron las frases de la vida de política de Miguel Uribe Turbay
+
+La vida de Miguel Uribe estuvo marcada por sus reclamos de fortalecer la seguridad en su país y los recuerdos que le dejó una infancia sin su madre, Diana Turbay, quien fue asesinada por el cartel de Pablo Escobar. Uribe Turbay murió casi a la misma edad que su mamá y pone en el centro del debate las garantías que tienen los políticos colombianos para ejercer su rol. Lea aquí algunas de sus frases más memorables:
+
+Miguel Uribe y las frases de su vida política: “Un país sin violencia se volvió mi propósito”
+
+Petro liderará consejo de seguridad extraordinario; habla su jefe de Despacho
+
+El jefe de Despacho del presidente Gustavo Petro, Alfredo Saade, se refirió al magnicidio de Miguel Uribe Turbay. Al respecto dijo que el jefe de Estado realizará este lunes un consejo de seguridad extraordinario para “salvaguardar los bienes, la honra y la vida de todos los colombianos”.
+
+“La actividad política siempre tiene un riesgo. No creo que esto haya aumentado el miedo a los candidatos. Manejar bicicleta tiene un riesgo. Aparte en un país tan convulsionado, como lo ha estado en los últimos 200 años de muerte, guerra y de sacar al adversario”, afirmó.
+
 Unidad para las Víctimas sobre fallecimiento del senador Miguel Uribe Turbay
 
 La Unidad para la Atención y Reparación Integral a las Víctimas, a través de un comunicado a la opinión pública, lamentó “profundamente el fallecimiento del senador Miguel Uribe Turbay”, y presentó sus condolencias ante su esposa, su padre, su hermana y sus hijos.
@@ -99,12 +149,6 @@ Precandidatos del Centro Democrático lamentaron magnicidio de senador Uribe
 Los cuatro precandidatos del Centro Democrático ya se manifestaron por el magnicidio de Miguel Uribe Turbay.
 
 La primera en hacerlo fue la senadora María Fernanda Cabal, quien aseguró que “Mi corazón y mis oraciones están con su familia y seres queridos. Que Dios les conceda fortaleza en este momento de inmensa tristeza. Colombia pierde hoy a un hombre íntegro, con todas las capacidades y el compromiso para ayudar a construir un mejor país. Dios lo reciba en su gloria y, desde donde esté, nos inspire a seguir reconstruyendo esta nación que hoy enfrenta nuevamente sus peores épocas de violencia”.
-
-Por su parte, la senadora Paloma Valencia dijo que “Colombia llora de pie. Jamás vencida. Unida y firme. Colombia puede más. No importa cuánto la ataquen: Colombia no cae. Y vamos a seguir y no vamos a parar hasta que la vida y la libertad triunfen siempre”.
-
-El senador Andrés Guerra afirmó: “Duele, Colombia. Miguel, atento, amable, inteligente, juicioso, estudioso, comprometido, honesto, franco, descomplicado, buen anfitrión, buen compañero. Te acompañé tres años en el Senado y recorrimos Colombia como precandidatos de nuestro”.
-
-Y la senadora Paola Holguín dijo: “Todas las oraciones para que Dios sea fuente de fortaleza y consuelo en un momento tan doloroso. Que Miguel desde el cielo guíe a Colombia y que su lucha sea ejemplo para las nuevas generaciones. A su Padre, su Esposa, su Hermana, sus Hijitos, y toda la familia un abrazo”.
 
 Tres días de luto en Bogotá
 

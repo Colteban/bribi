@@ -1,0 +1,20 @@
+<button id="themeToggle" title="Cambiar tema" class="tbtn">🌓</button>
+
+<script>
+const btn = document.getElementById("themeToggle");
+const root = document.documentElement;
+const KEY = "cf_theme";
+function apply(t){
+  root.dataset.theme = t; // "light" | "dark"
+  localStorage.setItem(KEY, t);
+}
+apply(localStorage.getItem(KEY) || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark":"light"));
+btn?.addEventListener("click", ()=>{
+  const next = (root.dataset.theme==="dark") ? "light" : "dark";
+  apply(next);
+});
+</script>
+
+<style>
+.tbtn { border:1px solid #ddd; background:#fff; border-radius:8px; padding:6px 8px; cursor:pointer; }
+</style>

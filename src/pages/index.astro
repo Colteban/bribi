@@ -1,169 +1,119 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
-import { getCollection } from 'astro:content';
-import HeroCard from '../components/HeroCard.astro';
-import NewsCardCompact from '../components/NewsCardCompact.astro';
-import NewsCard from '../components/NewsCard.astro';
-import KpiStrip from '../components/KpiStrip.astro';
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import KpiPanel from "../components/KpiPanel.astro";
+import NewsCard from "../components/NewsCard.astro";
+import { getCollection } from "astro:content";
+import TagFilters from "../components/TagFilters.astro";
 
 
-// Carga y filtra: si hay 'status', solo published; si no, todo
-const all0 = await getCollection('blog');
-const all = all0
-  .filter((p) => !p.data.status || p.data.status === 'published')
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+/** Carga artículos y ordena por fecha desc */
+const allPosts = (await getCollection("blog"))
+  .filter(p => (p.data?.status ?? "draft") !== "hidden")
+  .sort((a,b)=> new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime());
 
-// Helper para obtener imagen en formato {src,alt}
-const asImg = (p) => {
-  if (p.data.image?.src) return p.data.image;
-  if (p.data.heroImage?.src) return { src: p.data.heroImage.src, alt: p.data.heroImage.alt || p.data.title };
-  return undefined;
+/** Dedupe helper por slug */
+const used = new Set<string>();
+const take = (arr: typeof allPosts, n: number) => {
+  const out: typeof allPosts = [];
+  for (const p of arr) {
+    if (!used.has(p.slug)) { out.push(p); used.add(p.slug); }
+    if (out.length >= n) break;
+  }
+  return out;
 };
 
-// Destacado: 1) featured=true; 2) con imagen; 3) el más reciente
-let featured = all.find(p => p.data.featured === true)
-  ?? all.find(p => asImg(p))
-  ?? all[0];
+/** Top (últimas) */
+const TOP = take(allPosts, 6);
 
-const secondary = all.filter(p => featured && p.id !== featured.id).slice(0, 3);
+/** Orden preferente de secciones por tag “bonito” del frontmatter */
+const ORDER = ["Colombia","Finanzas","Economía","Pagos","Emprendimiento","Proyectos","Tecnología","Judicial","Cripto","América Latina","Mundo"];
 
-// Secciones por tag (si no tienes tags, pueden quedar vacías)
-function byTag(tag) {
-  return all.filter(p => (p.data.tags || []).map(t => t.toLowerCase()).includes(tag.toLowerCase())).slice(0, 6);
+/** Crea un mapa tag → posts sin repetir */
+const byTag: Record<string, typeof allPosts> = {};
+for (const nice of ORDER) {
+  const group = allPosts.filter(p => (p.data?.tags ?? []).includes(nice)).filter(p => !used.has(p.slug));
+  byTag[nice] = take(group, 4);
 }
-const economia = byTag('economía').length ? byTag('economía') : byTag('economia');
-const pagos    = byTag('pagos');
-const normativa= byTag('normativa');
-const pyme     = byTag('pyme');
----
 
-<!doctype html>
+
 <html lang="es">
   <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-    <style>
-      @media (min-width: 900px) {
-        .grid-hero { display:grid; grid-template-columns: 2fr 1fr; gap: 18px; }
-        .grid-sec  { display:grid; gap: 12px; }
-      }
-      .section { margin: 2rem 0; }
-      .section h2 { margin: 0 0 .75rem 0; }
-      .cards { display:grid; gap: 12px; }
-      @media (min-width: 800px) {.cards { grid-template-columns: 1fr 1fr; }}
-    </style>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Col Finance — Noticias financieras de Colombia y el mundo</title>
   </head>
   <body>
     <Header />
-    <KpiStrip />
-    <main style="max-width: 1100px; margin: 1.5rem auto 2.5rem auto; padding: 0 1rem;">
-      <!-- Héroe + secundarias -->
-      <section class="grid-hero">
-        <div>
-          {featured ? (
-            <HeroCard
-              href={`/blog/${featured.slug}/`}
-              title={featured.data.title}
-              description={featured.data.description}
-              image={asImg(featured)}
-              date={featured.data.pubDate}
-              tag={(featured.data.tags || [])[0]}
-            />
-          ) : (
-            <p>Aún no hay publicaciones destacadas.</p>
-          )}
-        </div>
-        <div class="grid-sec">
-          {secondary.map((p) => (
-            <NewsCardCompact
-              href={`/blog/${p.slug}/`}
-              title={p.data.title}
-              image={asImg(p)}
-              date={p.data.pubDate}
-            />
-          ))}
-        </div>
+
+    <main class="layout">
+      <!-- Columna principal -->
+      <section class="main">
+        <!-- Top -->
+        <TagFilters tags={ORDER} />
+        <section aria-label="Últimas">
+          <h2 class="section-title">Últimas</h2>
+          <div class="grid grid-top">
+            {TOP.map(p => (
+              <NewsCard
+                url={`/blog/${p.slug}/`}
+                title={p.data.title}
+                description={p.data.description}
+                pubDate={new Date(p.data.pubDate)}
+                tags={p.data.tags ?? []}
+              />
+            ))}
+          </div>
+        </section>
+
+        <!-- Secciones por tag (sin duplicados) -->
+        {ORDER.map(tag => (
+          byTag[tag]?.length ? (
+            <section data-section={tag} aria-label={tag}>
+              <h2 class="section-title">{tag}</h2>
+              <div class="grid">
+                {byTag[tag].map(p => (
+                  <NewsCard
+                    compact={true}
+                    url={`/blog/${p.slug}/`}
+                    title={p.data.title}
+                    description={p.data.description}
+                    pubDate={new Date(p.data.pubDate)}
+                    tags={p.data.tags ?? []}
+                  />
+                ))}
+              </div>
+            </section>
+          ) : null
+        ))}
       </section>
 
-      <!-- Secciones por tema -->
-      {economia.length > 0 && (
-        <section class="section">
-          <h2>Economía</h2>
-          <div class="cards">
-            {economia.map((p) => (
-              <NewsCard
-                href={`/blog/${p.slug}/`}
-                title={p.data.title}
-                date={p.data.pubDate}
-                description={p.data.description}
-                action={p.data.action}
-                image={asImg(p)}
-                tags={p.data.tags}
-              />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {pagos.length > 0 && (
-        <section class="section">
-          <h2>Pagos</h2>
-          <div class="cards">
-            {pagos.map((p) => (
-              <NewsCard
-                href={`/blog/${p.slug}/`}
-                title={p.data.title}
-                date={p.data.pubDate}
-                description={p.data.description}
-                action={p.data.action}
-                image={asImg(p)}
-                tags={p.data.tags}
-              />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {normativa.length > 0 && (
-        <section class="section">
-          <h2>Normativa</h2>
-          <div class="cards">
-            {normativa.map((p) => (
-              <NewsCard
-                href={`/blog/${p.slug}/`}
-                title={p.data.title}
-                date={p.data.pubDate}
-                description={p.data.description}
-                action={p.data.action}
-                image={asImg(p)}
-                tags={p.data.tags}
-              />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {pyme.length > 0 && (
-        <section class="section">
-          <h2>Pyme</h2>
-          <div class="cards">
-            {pyme.map((p) => (
-              <NewsCard
-                href={`/blog/${p.slug}/`}
-                title={p.data.title}
-                date={p.data.pubDate}
-                description={p.data.description}
-                action={p.data.action}
-                image={asImg(p)}
-                tags={p.data.tags}
-              />
-            ))}
-          </div>
-        </section>
-      )}
+      <!-- Barra derecha (KPIs) -->
+      <aside class="side">
+        <KpiPanel />
+      </aside>
     </main>
+
     <Footer />
   </body>
 </html>
+
+<style>
+/* Layout responsive: móvil 1 columna; desktop 2 columnas con barra derecha */
+.layout { max-width: 1100px; margin: 0 auto; padding: 12px 16px; display: grid; gap: 12px; grid-template-columns: 1fr; }
+.main > section { margin-bottom: 18px; }
+.section-title { font-size: 18px; margin: 8px 0 10px; }
+.grid { display: grid; gap: 10px; grid-template-columns: 1fr; }
+.grid-top { grid-template-columns: 1fr; }
+
+@media (min-width: 640px) {
+  .grid { grid-template-columns: 1fr 1fr; }
+  .grid-top { grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 1024px) {
+  .layout { grid-template-columns: minmax(0,1fr) 320px; align-items: start; }
+  .grid { grid-template-columns: repeat(3, 1fr); }
+  .grid-top { grid-template-columns: repeat(3, 1fr); }
+  .side { position: sticky; top: 10px; }
+}
+</style>

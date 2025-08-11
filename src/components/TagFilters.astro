@@ -1,0 +1,40 @@
+---
+export interface Props { tags: string[] }
+const { tags } = Astro.props;
+const ALL = "Todo";
+const list = [ALL, ...tags];
+---
+
+<div class="chipbar" id="chipbar">
+  {list.map(t => <button class="chip" data-tag={t}>{t}</button>)}
+</div>
+
+<script>
+const bar = document.getElementById("chipbar");
+function setActive(tag){
+  document.querySelectorAll("section[data-section]").forEach(s=>{
+    const t = s.getAttribute("data-section");
+    const show = (tag==="Todo") || (t===tag);
+    s.toggleAttribute("hidden", !show);
+  });
+  // estado visual
+  document.querySelectorAll(".chip").forEach(c=>{
+    c.toggleAttribute("data-active", c.dataset.tag===tag);
+  });
+}
+bar?.addEventListener("click", (e)=>{
+  const b = e.target.closest(".chip");
+  if(!b) return;
+  setActive(b.dataset.tag);
+});
+setActive("Todo");
+</script>
+
+<style>
+.chipbar { display:flex; gap:8px; overflow:auto; padding:8px 0; }
+.chip {
+  border:1px solid #ddd; background:#fff; border-radius:999px; padding:6px 10px;
+  font-size:13px; cursor:pointer; white-space:nowrap;
+}
+.chip[data-active] { background:#111; color:#fff; border-color:#111; }
+</style>

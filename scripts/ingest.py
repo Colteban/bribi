@@ -67,51 +67,70 @@ def clean_title(raw):
     # capitaliza solo la primera letra (evita gritos)
     return raw[:140].strip().capitalize()
 
+# Frases/fragmentos a eliminar (en minúsculas)
 STOP_PHRASES = [
+    # botones/ruido
     "compartir el código iframe se ha copiado en el portapapeles",
-    "publicidad",
-    "anuncio",
-    "síguenos en",
-    "newsletter",
-    "suscríbete",
-    "suscribete",
-    "le puede interesar",
-    "también le puede interesar",
-    "te puede interesar",
-    "haz clic aquí",
-    "haga clic aquí",
-    "ver más",
-    "ver mas",
-    "leer más",
-    "leer mas",
-    "continúe leyendo",
+    "publicidad", "anuncio", "síguenos en", "newsletter", "suscríbete", "suscribete",
+    "le puede interesar", "también le puede interesar", "te puede interesar",
+    "haz clic aquí", "haga clic aquí", "ver más", "ver mas", "leer más", "leer mas",
+    "continúe leyendo", "política de tratamiento de datos", "términos y condiciones",
+    "comentarios", "deja tu comentario",
 ]
 
-def clean_text(txt):
+# Patrones que suelen ser LICENCIAS/DISCLAIMERS (bloques enteros)
+STOP_REGEXES = [
+    r"creative\s*commons", r"\bcc\s*by(-| )?nc(-| )?sa\b", r"licencia\s+internacional",
+    r"esta\s+revista\s+est[áa]\s+autorizada", r"el\s+contenido\s+de\s+los\s+art[íi]culos\s+es\s+responsabilidad",
+    r"no\s+puede\s+ser\s+utilizada\s+con\s+fines\s+comerciales",
+]
+CUT_AFTER_MARKERS = [
+    "referencias", "bibliografía", "bibliografia", "licencia", "copyright",
+    "creative commons", "nota del editor", "créditos", "creditos",
+]
+
+def clean_text(txt: str) -> str:
     if not txt:
         return ""
-    # normaliza espacios y líneas
-    lines = [re.sub(r"\s+", " ", ln).strip() for ln in txt.splitlines()]
-    # filtra boilerplate
-    out = []
-    last = None
-    for ln in lines:
-        ln_low = ln.lower()
+    t = txt
+
+    # Normaliza puntos suspensivos y espacios
+    t = t.replace("…", "...")
+    t = re.sub(r"\.{3,}", ".", t)               # "....." -> "."
+    t = re.sub(r"[ \t]+", " ", t)               # espacios repetidos
+    t = re.sub(r"\n{3,}", "\n\n", t)            # saltos excesivos
+
+    # Parte en líneas, filtra ruido y LICENCIAS
+    out, seen = [], set()
+    for raw_ln in t.splitlines():
+        ln = raw_ln.strip()
         if not ln or len(ln) < 3:
             continue
-        # descarta si contiene frases basura
-        if any(p in ln_low for p in STOP_PHRASES):
+        low = ln.lower()
+
+        # corta si aparece un marcador de "fin útil" (referencias/licencia/etc.)
+        if any(m in low for m in CUT_AFTER_MARKERS):
+            break
+
+        # descarta líneas con frases basura o licencias/disclaimers
+        if any(p in low for p in STOP_PHRASES):
             continue
-        # descarta duplicados consecutivos
-        if last and ln == last:
+        if any(re.search(rx, low) for rx in STOP_REGEXES):
             continue
+
+        # evita párrafos duplicados exactos (y citas repetidas)
+        norm = re.sub(r'["“”«»]+', "", low)
+        if norm in seen:
+            continue
+        seen.add(norm)
         out.append(ln)
-        last = ln
-    # junta párrafos razonables
+
     body = "\n\n".join(out).strip()
-    # colapsa saltos excesivos
-    body = re.sub(r"\n{3,}", "\n\n", body)
+
+    # Limpieza final: más de 2 puntos seguidos otra vez por si quedaron
+    body = re.sub(r"\.{3,}", ".", body)
     return body
+
 
 
 def h(text): return hashlib.sha1(text.encode("utf-8", errors="ignore")).hexdigest()
@@ -173,11 +192,15 @@ Eres editor económico para comercios en Colombia/LATAM.
 Reescribe SIN copiar textual. Tono neutro. Entrega JSON: title, summary, article.
 
 Reglas:
+- No incluyas licencias, avisos legales, ni disclaimers editoriales (Creative Commons, etc.).
+- Evita citas largas; máximo una breve si aporta valor.
+- Puedes mencionar fuentes, de forma conversacional y periodística, profesional y a la vez fluida.
 - Título: 6–12 palabras, sin “| Nombre del medio”.
-- Summary: 150–250 palabras, 3–4 frases, con implicaciones y claridad.
+- Summary: 150–250 palabras, 3–4 frases, con implicaciones prácticas.
 - Article: 300–600 palabras, 4–7 párrafos, cierra con bloque:
   "Qué vigilar" (3 bullets accionables).
-- No inventes datos. Si falta algo, no lo supongas.
+- No inventes datos; si falta info, dilo sin suponer.
+- Puedes mencionar fuentes, de forma conversacional y periodística, profesional y a la vez fluida.
 - Español (Colombia). Fuente: {url}
 
 TEXTO LIMPIO (parcial si es largo):
@@ -235,7 +258,12 @@ def write_md(title, link, body, og_image="", ai=None, status="draft"):
 
     # Si hay IA, úsala; si no, usa lo que ya tenías
     title = clean_title(ai["title"] if ai and ai.get("title") else title)
-    summary = ai["summary"] if ai and ai.get("summary") else (body[:250] + "..." if len(body) > 250 else body)
+    if ai and ai.get("summary"):
+        summary = ai["summary"].strip()
+    else:
+        trimmed = body[:300]
+        trimmed = re.sub(r"\s+\S*$", "", trimmed)   # corta en el límite de palabra
+        summary = trimmed if len(body) <= 300 else trimmed + "…"   # solo UNA elipsis
     article_md = ai["article"] if ai and ai.get("article") else body
 
     # mínimo de calidad
@@ -295,11 +323,12 @@ def run():
 
 
             source_url = canon or final_url
-            body = extract_article(source_url)
-            if not body or len(body) < 200:   # usa 200 si quieres que entre más material (antes tenías 300)
+            raw = extract_article(source_url)   # texto crudo
+            body = clean_text(raw)              # 👈 LIMPIA AQUÍ
+            if not body or len(body) < 200:
                 continue
 
-            ai = summarize_with_gemini(body, source_url)  # puede ser None si falla o si no hay clave
+            ai = summarize_with_gemini(body, source_url)  # la IA ya recibe texto limpio
             write_md(title, source_url, body, og_image=og_image, ai=ai, status="draft")
             seen.add(key)
             new_items += 1

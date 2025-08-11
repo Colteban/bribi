@@ -455,7 +455,7 @@ def write_md(title, link, body, og_image="", ai=None, status="draft"):
     # canonical siempre al link de la fuente (ya lo calculaste al procesar)
     canonical = link
 
-    # FRONTMATTER — ojo a comas y llaves
+    # FRONTMATTER — ¡ojo comas y llaves!
     fm = {
         "title": title,
         "description": summary,
@@ -475,8 +475,9 @@ def write_md(title, link, body, og_image="", ai=None, status="draft"):
 
 
 
+
 def run():
-    import os, urllib.parse, datetime, time
+    import os, urllib.parse, time
     from collections import defaultdict
 
     ROOT = Path(__file__).resolve().parents[1]
@@ -488,23 +489,33 @@ def run():
 
     CONTENT.mkdir(parents=True, exist_ok=True)
 
-    # 1) SIEMPRE declara POOL ANTES del bucle
+    # 1) Recolector de candidatos
     POOL = []
 
-    # (carga feeds, construye 'candidates' como ya lo haces)
-    candidates = discover_candidates(FEEDS_FILE)  # <- tu lógica existente
+    # Construye lista (título, link) como ya lo haces
+    candidates = discover_candidates(FEEDS_FILE)
 
-    seen = load_seen()  # si tienes deduplicación
+    # deduplicación básica (si tienes load_seen/h, se usan; si no, fallbacks)
+    try:
+        seen = load_seen()
+    except Exception:
+        seen = set()
+
     for title, link in candidates:
-        # --- tu deduplicación previa ---
-        # if h(title+link) in seen: continue
+        try:
+            key0 = h(title + link)
+        except Exception:
+            key0 = f"{title}|{link}"
+
+        if key0 in seen:
+            continue
 
         html, final_url = get_html(link)
         canon = final_url
-        og_image = ""  # no reusar OG
+        og_image = ""  # no reutilizamos OG de la fuente
 
         if html:
-            c, _ = extract_meta(final_url, html)  # ignoramos OG
+            c, _ = extract_meta(final_url, html)  # ignoramos imagen OG
             if c:
                 canon = urllib.parse.urljoin(final_url, c)
 
@@ -516,29 +527,31 @@ def run():
             continue
 
         dom    = domain_of(canon)
-        region = infer_region(canon, body)
-        topics = infer_topics(canon, body)
+        region = infer_region(canon, body)      # "CO"/"LATAM"/"WORLD"
+        topics = infer_topics(canon, body)      # p.ej. ["economia","finanzas"]
         is_big = dom in BIG_MEDIA
 
-        # 2) AÑADE al POOL dentro del bucle
         POOL.append({
             "title": title,
-            "url": canon,
+            "url": canon,     # guardamos la canónica aquí
             "body": body,
             "domain": dom,
-            "region": region,   # "CO", "LATAM", "WORLD"
-            "topics": topics,   # ej. ["economia","finanzas"]
+            "region": region,
+            "topics": topics,
             "is_big": is_big,
         })
+
+        seen.add(key0)
         time.sleep(0.4)
 
-    # 3) SI POOL ESTÁ VACÍO, salir sin error
     if not POOL:
         print("No hubo candidatos válidos en esta corrida.")
         return
 
-    # === Selección priorizada (12) ===
+    # 2) Selección priorizada → 12 (o según env)
     MAX_NEW = int(os.getenv("MAX_NEW", "12"))
+    GEMINI_BUDGET = int(os.getenv("GEMINI_BUDGET", "12"))
+
     by_region_topic = defaultdict(list)
     by_topic = defaultdict(list)
     non_big_by_topic_CO = defaultdict(list)
@@ -557,10 +570,86 @@ def run():
         return None
 
     selected, used = [], set()
-    # … (aquí tu lógica de selección de 12 tal como la pegaste) …
 
-    # === Escribir (respetando budget de IA) ===
-    GEMINI_BUDGET = int(os.getenv("GEMINI_BUDGET", "12"))  # o "10" si quieres 10 con IA
+    # (1) 2 temas con más publicaciones en CO (estilo crítico)
+    top_CO_topics = sorted(
+        [(tp, len(by_region_topic[("CO", tp)])) for tp in by_topic.keys()],
+        key=lambda x: x[1], reverse=True
+    )
+    for tp, _n in top_CO_topics[:2]:
+        it = pick_one(by_region_topic[("CO", tp)], used)
+        if it: selected.append(("critico", it))
+        if len(selected) >= MAX_NEW: break
+
+    # (2) 1 tema con más publicaciones en WORLD (estilo crítico)
+    if len(selected) < MAX_NEW:
+        top_WORLD_topics = sorted(
+            [(tp, len(by_region_topic[("WORLD", tp)])) for tp in by_topic.keys()],
+            key=lambda x: x[1], reverse=True
+        )
+        if top_WORLD_topics:
+            tp, _n = top_WORLD_topics[0]
+            it = pick_one(by_region_topic[("WORLD", tp)], used)
+            if it: selected.append(("critico", it))
+
+    # (3) 2 “silencios” en CO: ≥2 notas no-grandes y 0 de grandes (estilo crítico)
+    if len(selected) < MAX_NEW:
+        silencios = []
+        for tp, lst in non_big_by_topic_CO.items():
+            if len(lst) >= 2:
+                big_count = sum(1 for x in by_region_topic[("CO", tp)] if x["is_big"])
+                if big_count == 0:
+                    silencios.append((tp, len(lst)))
+        for tp, _ in sorted(silencios, key=lambda x: x[1], reverse=True)[:2]:
+            it = pick_one(non_big_by_topic_CO[tp], used)
+            if it: selected.append(("critico", it))
+            if len(selected) >= MAX_NEW: break
+
+    # (4) 1 Emprendimiento en CO
+    if len(selected) < MAX_NEW:
+        it = pick_one(by_region_topic.get(("CO","emprende"), []), used)
+        if it: selected.append(("emprende", it))
+
+    # (5) 1 Finanzas en CO
+    if len(selected) < MAX_NEW:
+        it = pick_one(by_region_topic.get(("CO","finanzas"), []), used)
+        if it: selected.append(("finanzas", it))
+
+    # (6) 1 Economía en CO
+    if len(selected) < MAX_NEW:
+        it = pick_one(by_region_topic.get(("CO","economia"), []), used)
+        if it: selected.append(("economia", it))
+
+    # (7) 1 Pagos/fintech (preferencia CO → LATAM → WORLD)
+    if len(selected) < MAX_NEW:
+        it = (pick_one(by_region_topic.get(("CO","pagos"), []), used)
+              or pick_one(by_region_topic.get(("LATAM","pagos"), []), used)
+              or pick_one(by_region_topic.get(("WORLD","pagos"), []), used))
+        if it: selected.append(("pagos", it))
+
+    # (8) 1 Proyectos/Inversiones en CO
+    if len(selected) < MAX_NEW:
+        it = pick_one(by_region_topic.get(("CO","proyectos"), []), used)
+        if it: selected.append(("proyectos", it))
+
+    # (9) +2 extras (Tecnología CO, Judicial CO) y relleno si faltan (prefiere CO)
+    EXTRA_TARGETS = [("tecnologia","CO"), ("judicial","CO")]
+    for tp, rg in EXTRA_TARGETS:
+        if len(selected) >= MAX_NEW: break
+        it = pick_one(by_region_topic.get((rg, tp), []), used)
+        if it: selected.append(("critico", it))
+
+    if len(selected) < MAX_NEW:
+        resto = [it for it in POOL if it["url"] not in used]
+        order = {"CO":0, "LATAM":1, "WORLD":2}
+        resto.sort(key=lambda x: order.get(x["region"], 3))
+        for it in resto:
+            selected.append(("boletin", it))
+            used.add(it["url"])
+            if len(selected) >= MAX_NEW:
+                break
+
+    # 3) Escribir (respetando presupuesto IA)
     calls = 0
     for style, it in selected:
         ai = None
@@ -573,141 +662,156 @@ def run():
 
         write_md(
             it["title"],
-            it["url"],   # ya es canónica
+            it["url"],    # canónica
             it["body"],
-            og_image="", # nunca reusamos OG
+            og_image="",  # NO OG
             ai=ai,
             status="draft"
         )
 
-    # (opcional) save_seen(seen) si actualizas tu set de vistos
 
+    # === 1) Índices para selección ===
+    MAX_NEW = int(os.getenv("MAX_NEW", "12"))
+    GEMINI_BUDGET = int(os.getenv("GEMINI_BUDGET", "12"))
 
-MAX_NEW = int(os.getenv("MAX_NEW", "12"))
+    by_region_topic = defaultdict(list)
+    by_topic = defaultdict(list)
+    non_big_by_topic_CO = defaultdict(list)
+    for it in POOL:
+        for tp in it["topics"]:
+            by_topic[tp].append(it)
+            by_region_topic[(it["region"], tp)].append(it)
+            if it["region"] == "CO" and not it["is_big"]:
+                non_big_by_topic_CO[tp].append(it)
 
-# Índices
-by_region_topic = defaultdict(list)
-by_topic = defaultdict(list)
-non_big_by_topic_CO = defaultdict(list)
-for it in POOL:
-    for tp in it["topics"]:
-        by_topic[tp].append(it)
-        by_region_topic[(it["region"], tp)].append(it)
-        if it["region"] == "CO" and not it["is_big"]:
-            non_big_by_topic_CO[tp].append(it)
+    def pick_one(lst, used):
+        for it in lst:
+            if it["url"] not in used:
+                used.add(it["url"])
+                return it
+        return None
 
-def pick_one(lst, used):
-    for it in lst:
-        if it["url"] not in used:
-            used.add(it["url"])
-            return it
-    return None
+    selected, used = [], set()
 
-selected = []
-used = set()
-
-# 1) 2 temas con más publicaciones detectadas en CO (estilo crítico)
-top_CO_topics = sorted(
-    [(tp, len(by_region_topic[("CO", tp)])) for tp in by_topic.keys()],
-    key=lambda x: x[1], reverse=True
-)
-for tp, _n in top_CO_topics[:2]:
-    it = pick_one(by_region_topic[("CO", tp)], used)
-    if it: selected.append(("critico", it))
-    if len(selected) >= MAX_NEW: break
-
-# 2) 1 tema con más publicaciones en WORLD (estilo crítico)
-if len(selected) < MAX_NEW:
-    top_WORLD_topics = sorted(
-        [(tp, len(by_region_topic[("WORLD", tp)])) for tp in by_topic.keys()],
+    # === 2) TU BLOQUE DE SELECCIÓN (déjalo tal cual) ===
+    # 1) 2 temas con más publicaciones detectadas en CO (estilo crítico)
+    top_CO_topics = sorted(
+        [(tp, len(by_region_topic[("CO", tp)])) for tp in by_topic.keys()],
         key=lambda x: x[1], reverse=True
     )
-    if top_WORLD_topics:
-        tp, _n = top_WORLD_topics[0]
-        it = pick_one(by_region_topic[("WORLD", tp)], used)
-        if it: selected.append(("critico", it))
-
-# 3) 2 “silencios” en CO: ≥2 notas de no-grandes y 0 de grandes (estilo crítico)
-if len(selected) < MAX_NEW:
-    silencios = []
-    for tp, lst in non_big_by_topic_CO.items():
-        if len(lst) >= 2:
-            big_count = sum(1 for x in by_region_topic[("CO", tp)] if x["is_big"])
-            if big_count == 0:
-                silencios.append((tp, len(lst)))
-    for tp, _ in sorted(silencios, key=lambda x: x[1], reverse=True)[:2]:
-        it = pick_one(non_big_by_topic_CO[tp], used)
+    for tp, _n in top_CO_topics[:2]:
+        it = pick_one(by_region_topic[("CO", tp)], used)
         if it: selected.append(("critico", it))
         if len(selected) >= MAX_NEW: break
 
-# 4) 1 Emprendimiento en CO
-if len(selected) < MAX_NEW:
-    it = pick_one(by_region_topic.get(("CO","emprende"), []), used)
-    if it: selected.append(("emprende", it))
+    # 2) 1 tema con más publicaciones en WORLD (estilo crítico)
+    if len(selected) < MAX_NEW:
+        top_WORLD_topics = sorted(
+            [(tp, len(by_region_topic[("WORLD", tp)])) for tp in by_topic.keys()],
+            key=lambda x: x[1], reverse=True
+        )
+        if top_WORLD_topics:
+            tp, _n = top_WORLD_topics[0]
+            it = pick_one(by_region_topic[("WORLD", tp)], used)
+            if it: selected.append(("critico", it))
 
-# 5) 1 Finanzas en CO
-if len(selected) < MAX_NEW:
-    it = pick_one(by_region_topic.get(("CO","finanzas"), []), used)
-    if it: selected.append(("finanzas", it))
+    # 3) 2 “silencios” en CO (no-grandes≥2 y grandes=0) (estilo crítico)
+    if len(selected) < MAX_NEW:
+        silencios = []
+        for tp, lst in non_big_by_topic_CO.items():
+            if len(lst) >= 2:
+                big_count = sum(1 for x in by_region_topic[("CO", tp)] if x["is_big"])
+                if big_count == 0:
+                    silencios.append((tp, len(lst)))
+        for tp, _ in sorted(silencios, key=lambda x: x[1], reverse=True)[:2]:
+            it = pick_one(non_big_by_topic_CO[tp], used)
+            if it: selected.append(("critico", it))
+            if len(selected) >= MAX_NEW: break
 
-# 6) 1 Economía en CO
-if len(selected) < MAX_NEW:
-    it = pick_one(by_region_topic.get(("CO","economia"), []), used)
-    if it: selected.append(("economia", it))
+    # 4) 1 Emprendimiento en CO
+    if len(selected) < MAX_NEW:
+        it = pick_one(by_region_topic.get(("CO","emprende"), []), used)
+        if it: selected.append(("emprende", it))
 
-# 7) 1 Pagos/Fintech (CO si hay, si no LATAM/WORLD)
-if len(selected) < MAX_NEW:
-    it = (pick_one(by_region_topic.get(("CO","pagos"), []), used)
-          or pick_one(by_region_topic.get(("LATAM","pagos"), []), used)
-          or pick_one(by_region_topic.get(("WORLD","pagos"), []), used))
-    if it: selected.append(("pagos", it))
+    # 5) 1 Finanzas en CO
+    if len(selected) < MAX_NEW:
+        it = pick_one(by_region_topic.get(("CO","finanzas"), []), used)
+        if it: selected.append(("finanzas", it))
 
-# 8) 1 Proyectos/Inversiones en CO
-if len(selected) < MAX_NEW:
-    it = pick_one(by_region_topic.get(("CO","proyectos"), []), used)
-    if it: selected.append(("proyectos", it))
+    # 6) 1 Economía en CO
+    if len(selected) < MAX_NEW:
+        it = pick_one(by_region_topic.get(("CO","economia"), []), used)
+        if it: selected.append(("economia", it))
 
-# 9) + 2 slots extra para completar 12 (prioriza Tecnología CO y Judicial CO; luego CO generales)
-EXTRA_TARGETS = [("tecnologia","CO"), ("judicial","CO")]
-for tp, rg in EXTRA_TARGETS:
-    if len(selected) >= MAX_NEW: break
-    it = pick_one(by_region_topic.get((rg, tp), []), used)
-    if it: selected.append(("critico", it))
+    # 7) 1 Pagos/Fintech (CO→LATAM→WORLD)
+    if len(selected) < MAX_NEW:
+        it = (pick_one(by_region_topic.get(("CO","pagos"), []), used)
+              or pick_one(by_region_topic.get(("LATAM","pagos"), []), used)
+              or pick_one(by_region_topic.get(("WORLD","pagos"), []), used))
+        if it: selected.append(("pagos", it))
 
-# Relleno si aún faltan (prefiere CO, luego LATAM, luego WORLD)
-if len(selected) < MAX_NEW:
-    resto = [it for it in POOL if it["url"] not in used]
-    # ordena por preferencia región
-    order = {"CO":0, "LATAM":1, "WORLD":2}
-    resto.sort(key=lambda x: order.get(x["region"], 3))
-    for it in resto:
-        selected.append(("boletin", it))
-        used.add(it["url"])
-        if len(selected) >= MAX_NEW:
-            break
+    # 8) 1 Proyectos/Inversiones en CO
+    if len(selected) < MAX_NEW:
+        it = pick_one(by_region_topic.get(("CO","proyectos"), []), used)
+        if it: selected.append(("proyectos", it))
 
-# === Escribir: respeta budget de IA ===
-calls = 0
-for style, it in selected:
-    topics = it["topics"]; region = it["region"]; dom = it["domain"]
-    ai = None
-    if calls < GEMINI_BUDGET:
-        ai = summarize_with_gemini(it["body"], it["url"], style=style, main_domain=dom)
-        calls += 1
-        # añade topics/region a lo que pasa a write_md (para tags bonitos)
-        if ai is not None:
-            ai["topics"] = topics
-            ai["region"] = region
-    # sin imagen OG
-    write_md(
-        it["title"],
-        it["url"],          # <- ya guardamos la canónica en "url" al llenar el POOL
-        it["body"],
-        og_image="",        # <- no reutilizamos OG
-        ai=ai,
-        status="draft"
-    )
+    # 9) +2 extras (Tecnología CO, Judicial CO) y relleno si faltan (prefiere CO)
+    EXTRA_TARGETS = [("tecnologia","CO"), ("judicial","CO")]
+    for tp, rg in EXTRA_TARGETS:
+        if len(selected) >= MAX_NEW: break
+        it = pick_one(by_region_topic.get((rg, tp), []), used)
+        if it: selected.append(("critico", it))
 
+    if len(selected) < MAX_NEW:
+        resto = [it for it in POOL if it["url"] not in used]
+        order = {"CO":0, "LATAM":1, "WORLD":2}
+        resto.sort(key=lambda x: order.get(x["region"], 3))
+        for it in resto:
+            selected.append(("boletin", it))
+            used.add(it["url"])
+            if len(selected) >= MAX_NEW:
+                break
+
+    # === 3) Escritura (respeta presupuesto de IA) ===
+    calls = 0
+    for style, it in selected:
+        ai = None
+        if calls < GEMINI_BUDGET:
+            ai = summarize_with_gemini(it["body"], it["url"], style=style, main_domain=it["domain"])
+            calls += 1
+            if ai:
+                ai["topics"] = it["topics"]
+                ai["region"] = it["region"]
+
+        write_md(
+            it["title"],
+            it["url"],    # canónica
+            it["body"],
+            og_image="",  # no OG
+            ai=ai,
+            status="draft"
+        )
+
+    GEMINI_BUDGET = int(os.getenv("GEMINI_BUDGET", "10"))  # o "12"
+    calls = 0
+    for style, it in selected:
+        topics = it["topics"]; region = it["region"]; dom = it["domain"]
+        ai = None
+        if calls < GEMINI_BUDGET:
+            ai = summarize_with_gemini(it["body"], it["url"], style=style, main_domain=dom)
+            calls += 1
+            if ai is not None:
+                ai["topics"] = topics
+                ai["region"]  = region
+
+        write_md(
+            it["title"],
+            it["url"],      # canónica
+            it["body"],
+            og_image="",    # no OG
+            ai=ai,
+            status="draft"
+        )
 
 if __name__ == "__main__":
     run()

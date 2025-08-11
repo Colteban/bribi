@@ -476,50 +476,112 @@ def write_md(title, link, body, og_image="", ai=None, status="draft"):
 
 
 def run():
-    urls = [u.strip() for u in FEEDS_FILE.read_text(encoding="utf-8").splitlines() if u.strip() and not u.strip().startswith("#")]
-    new_items = 0
-    for url in urls:
-        if new_items >= MAX_NEW: break
-        feed = discover_feed(url)
-        candidates = parse_feed(feed, limit=6) if feed else discover_articles_from_home(url, limit=4)
-        
-        POOL = []
-        for title, link in candidates:
-            if new_items >= MAX_NEW: 
-                break
+    import os, urllib.parse, datetime, time
+    from collections import defaultdict
 
-            html, final_url = get_html(link)
-            canon = final_url
-            og_image = ""  # no reusar imágenes OG de la fuente
-            if html:
-                canon, _og = extract_meta(final_url, html)   # ignoramos imagen OG
-            source_url = canon or final_url
+    ROOT = Path(__file__).resolve().parents[1]
+    CONTENT = ROOT / "src" / "content" / "blog"
+    FEEDS_FILE = ROOT / "data" / "feeds.txt"
+    print("USANDO RAIZ:", ROOT)
+    print("CONTENIDO EN:", CONTENT)
+    print("FEEDS_FILE:", FEEDS_FILE)
 
-            raw = extract_article(source_url)
-            body = clean_text(raw)
-            if not body or len(body) < 200:
-                continue
-            if not quality_ok(body):
-                continue
+    CONTENT.mkdir(parents=True, exist_ok=True)
 
-            dom = domain_of(source_url)
-            region = infer_region(source_url, body)
-            topics = infer_topics(source_url, body)
-            is_big = dom in BIG_MEDIA
-            POOL.append({
-                "title": title,
-                "url": source_url,
-                "body": body,
-                "domain": dom,
-                "region": region,     # "CO", "LATAM", "WORLD"
-                "topics": topics,     # ej. ["economia","finanzas"]
-                "is_big": is_big,
-            })
-            time.sleep(0.4)
+    # 1) SIEMPRE declara POOL ANTES del bucle
+    POOL = []
 
+    # (carga feeds, construye 'candidates' como ya lo haces)
+    candidates = discover_candidates(FEEDS_FILE)  # <- tu lógica existente
 
-    SEEN.write_text(json.dumps(sorted(list(seen))), encoding="utf-8")
-    print(f"Drafts creados: {new_items}")
+    seen = load_seen()  # si tienes deduplicación
+    for title, link in candidates:
+        # --- tu deduplicación previa ---
+        # if h(title+link) in seen: continue
+
+        html, final_url = get_html(link)
+        canon = final_url
+        og_image = ""  # no reusar OG
+
+        if html:
+            c, _ = extract_meta(final_url, html)  # ignoramos OG
+            if c:
+                canon = urllib.parse.urljoin(final_url, c)
+
+        raw = extract_article(canon or final_url)
+        body = clean_text(raw)
+        if not body or len(body) < 200:
+            continue
+        if not quality_ok(body):
+            continue
+
+        dom    = domain_of(canon)
+        region = infer_region(canon, body)
+        topics = infer_topics(canon, body)
+        is_big = dom in BIG_MEDIA
+
+        # 2) AÑADE al POOL dentro del bucle
+        POOL.append({
+            "title": title,
+            "url": canon,
+            "body": body,
+            "domain": dom,
+            "region": region,   # "CO", "LATAM", "WORLD"
+            "topics": topics,   # ej. ["economia","finanzas"]
+            "is_big": is_big,
+        })
+        time.sleep(0.4)
+
+    # 3) SI POOL ESTÁ VACÍO, salir sin error
+    if not POOL:
+        print("No hubo candidatos válidos en esta corrida.")
+        return
+
+    # === Selección priorizada (12) ===
+    MAX_NEW = int(os.getenv("MAX_NEW", "12"))
+    by_region_topic = defaultdict(list)
+    by_topic = defaultdict(list)
+    non_big_by_topic_CO = defaultdict(list)
+    for it in POOL:
+        for tp in it["topics"]:
+            by_topic[tp].append(it)
+            by_region_topic[(it["region"], tp)].append(it)
+            if it["region"] == "CO" and not it["is_big"]:
+                non_big_by_topic_CO[tp].append(it)
+
+    def pick_one(lst, used):
+        for it in lst:
+            if it["url"] not in used:
+                used.add(it["url"])
+                return it
+        return None
+
+    selected, used = [], set()
+    # … (aquí tu lógica de selección de 12 tal como la pegaste) …
+
+    # === Escribir (respetando budget de IA) ===
+    GEMINI_BUDGET = int(os.getenv("GEMINI_BUDGET", "12"))  # o "10" si quieres 10 con IA
+    calls = 0
+    for style, it in selected:
+        ai = None
+        if calls < GEMINI_BUDGET:
+            ai = summarize_with_gemini(it["body"], it["url"], style=style, main_domain=it["domain"])
+            calls += 1
+            if ai:
+                ai["topics"] = it["topics"]
+                ai["region"] = it["region"]
+
+        write_md(
+            it["title"],
+            it["url"],   # ya es canónica
+            it["body"],
+            og_image="", # nunca reusamos OG
+            ai=ai,
+            status="draft"
+        )
+
+    # (opcional) save_seen(seen) si actualizas tu set de vistos
+
 
 MAX_NEW = int(os.getenv("MAX_NEW", "12"))
 

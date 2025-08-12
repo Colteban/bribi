@@ -1,0 +1,457 @@
+---
+title: Magnicidio de Miguel Uribe
+description: 'Escucha este artículo
+
+
+  Audio generado con IA de Google
+
+
+  Luego de dos meses de estar batallando por su vida, Miguel Uribe Turbay murió a
+  sus 39 años. El senador fue víctima de un ataque sicarial en el barrio Modelia de
+  Bogotá el pasado 7 de junio. Su muerte la confirmó su equipo de prensa y su…'
+pubDate: '2025-08-12'
+tags:
+- Mundo
+status: draft
+risk: bajo
+action: Evaluar impacto en comisiones/operación.
+sources:
+- name: Fuente
+  url: https://www.elespectador.com/judicial/muerte-de-miguel-uribe-en-vivo-magnicidio-del-senador-mas-votado-de-colombia/
+canonicalUrl: https://www.elespectador.com/judicial/muerte-de-miguel-uribe-en-vivo-magnicidio-del-senador-mas-votado-de-colombia/
+---
+Escucha este artículo
+
+Audio generado con IA de Google
+
+Luego de dos meses de estar batallando por su vida, Miguel Uribe Turbay murió a sus 39 años. El senador fue víctima de un ataque sicarial en el barrio Modelia de Bogotá el pasado 7 de junio. Su muerte la confirmó su equipo de prensa y su esposa, María Claudia Tarazona.
+
+Uribe recibió tres disparos, dos en la cabeza y uno en la pierna izquierda. Pese a los esfuerzos médicos durante dos meses, el senador y precandidato no sobrevivió. El pasado sábado 9 de agosto, la Fundación Santa Fe, donde estaba hospitalizado, confirmó que el senador había tenido una hemorragia en su cerebro.
+
+Así fue el cubrimiento de El Espectador en una jornada marcada por los pronunciamientos de sus familiares, amigos, congresistas e integrantes del gobierno de Gustavo Petro.
+
+Llegó el féretro de Miguel Uribe al Congreso
+
+Hacia las 9:00 de la noche de este lunes 11 de agosto, el féretro de Miguel Uribe Turbay llegó al Capitolio Nacional, donde iniciará la cámara ardiente que durará dos días. La ceremonia arrancó con el himno nacional y continuó con varios discursos de familiares y amigos del senador. Este martes, los ciudadanos que quieran asistir podrán hacerlo a partir de las 8:30 a.m., ingresando por la Plaza de Bolívar. El miércoles habrá un ceremonia para familiares y congresistas antes de que el cuerpo sea trasladado a la Catedral Primada
+
+Gobierno nacional decreta un día de luto nacional
+
+A través del decreto 0895 de 2025, la Casa de Nariño ordenó 24 horas de “duelo nacional”. Durante este tiempo, entre otras cosas, todas las entidades públicas del país izarán a media asta –al igual que unidades militares y embajadas en el exterior– la bandera nacional.
+
+Por medio de otro documento rotulado 0896 de este año, se decretaron “honores fúnebres”. Además, para este martes, está previsto el ingreso al público en general en el Capitolio desde la Plaza de Bolívar. Esto se hará entre las 8:30 a.m. y las 6:00 p.m.
+
+Y para este 13 de agosto, se tiene prevista una ceremonia religiosa en la Catedral Primada de Bogotá, tras un “homenaje exclusivo” para familiares y congresistas que se hará de las 9:00 a.m. en la sede del Legislativo.
+
+“Rechazo cualquier acto de violencia o de venganza” María Claudia Tarazona, viuda de Miguel Uribe.
+
+En el Congreso de la República se lleva a cabo la cámara ardiente por el magnicidio del senador Miguel Uribe Turbay. Su viuda, María Claudia Tarazona, dijo que: “romper una familia es el acto de violencia más horrible que se pueda cometer jamás”. Sin embargo, rechazó cualquier acto de violencia o de venganza por la muerte del político Centro Democrático. Asimismo, pidió justicia, asegurando que solo esta traerá democracia. “Que los seres humanos respondan por sus actos hace un país justo y debe haber justicia. No solo por Miguel, sino por una Colombia entera que merece paz”, afirmó.
+
+Claudia Tarazona también se refirió a la lucha que vivió en la clínica Santa Fe tras el atentado contra su esposo: “Sin esos dos meses de preparación hubiera sido imposible enfrentar este momento. Dios está conmigo, me da fortaleza y me enseñó el camino del amor”.
+
+La Casa de Nariño reacciona
+
+Como indicó en su cuenta de X, antes Twitter, el ministro del Interior Armando Benedetti, en la Casa de Nariño dejaron la bandera de Colombia a media asta.
+
+Bandera a media asta en la Casa de Nariño en homenaje a Miguel Uribe Turbay. pic.twitter.com/9hHDi28fD2
+
+— Armando Benedetti (@AABenedetti) August 11, 2025
+
+El comisionado de Paz se pronuncia
+
+El consejero comisionado de paz, Otty Patiño, lamentó la muerte del senador y precandidato presidencial Miguel Uribe y mencionó la necesidad de un “pacto para no permitir que los niños sean instrumentos de muerte”. A través de un comunicado, el comisionado señaló que las investigaciones deben avanzar para saber quienes están detrás del asesinato del senador a manos de un menor de edad.
+
+“Desde el día del atentado contra Miguel Uribe Turbay he intentado entender las razones de quienes pagaron por poner en las manos de un chico de 15 años un arma para disparar contra el senador. La justicia está avanzando y nos permitirá ir desentrañando las razones de quienes armaron a ese niño y hoy guardan un cobarse silencio”, escribió el comisionado.
+
+Asimismo, el alto funcionario envió su mensaje de condolencias a la familia Uribe Turbay e hizo un llamado a los funcionarios a unirse para impedir que los niños en el país sigan en la violencia.
+
+“No dejo de sentir una enorme impotencia al ver el difícil desafío que tenemos para impedir que los niños en Colombia no sigan siendo alimentados por el ciclo de rencor y venganza en el que una parte de nuestro país está atrapada hace décadas. Las personas que de una u otra forma ejercemos poder no nos podemos dejar sumir en la confrontación”, dijo.
+
+Director de la UNP dice que “cumplimos con todo”
+
+En atención a medios, el director de la Unidad Nacional de Protección (UNP), Augusto Rodríguez, le salió al paso a las críticas por presunta falta de atención a los reclamos de Miguel Uribe por seguridad. Según Rodríguez, la Fiscalía y la Procuraduría están adelantando investigaciones, así como la oficina de control interno disciplinario de la UNP. “Al revisar los procesos, hemos encontrado que cumplimos con todo lo que tiene que ver con el cubrimiento de las personas que tenían que estar”, señaló.
+
+Y agregó el funcionario público: “Nos encargamos de que tuviera el equipo adecuado, los vehículos funcionales, el armamento y la munición, todo en su correcto estado de funcionamiento. Otras cosas fueron lamentables coincidencias para ese día”. Por último, Augusto Rodríguez explicó que está trabajando para que todos los precandidatos presidenciales cuenten con un esquema robusto de protección de cara a 2026.
+
+Procurador Eljach le hace un llamado al presidente Petro
+
+El procurador general de la Nación, Gregorio Eljach, se pronunció desde el edificio central de la entidad, en el centro de Bogotá. Entre los llamados que hizo Eljach estuvo uno dirigido directamente al presidente Gustavo Petro, de quien recordó que representa la unidad de la Nación. “Suscriba también este consenso por la defensa de la vida”,mencionó el procurador en alocución pública.
+
+Eljach entregó un discurso enfocado en dejar a un lado la polarización política, basado en este hecho de violencia política que no se presenciaba desde los años noventa, en esa magnitud, en el país.
+
+“Les pido de manera enfática a todos los líderes de Colombia, de los sectores público y privado, del sector empresarial, de las iglesias, de la academia y de los medios de comunicación, y a cada colombiano donde quiera que esté a decretar la paz en cada uno de nuestros corazones y acoger allá en la intimidad de nuestras conciencias el consenso por la defensa de la vida”, concluyó el procurador.
+
+Mindefensa reitera recompensa de $3.000 millones
+
+El ministro de Defensa, Pedro Sánchez, lideró una rueda de prensa este 11 de agosto en el que lamentó la muerte del senador del Centro Democrático, Miguel Uribe, y reiteró que existe una recompensa de $3.000 millones a cambio de información que ayude a llegar a los autores intelectuales del atentado perpetrado el pasado 7 de junio en Bogotá.
+
+Además, Sánchez aseguró que en la cartera ministerial trabaja una junta de inteligencia, con apoyo de países como Emiratos Árabes, Reino Unido y Estados Unidos, para dar con los responsables del ataque sicarial que, dos meses después de ejecutado, acabó con la vida de Uribe Turbay.
+
+El ministro Sánchez se refirió a las líneas de investigación que adelanta la fuerza pública y los organismos de inteligencias. En ese sentido, explicó que hay varias, entre ellas la que apunta a que detrás del ataque estuvo la disidencia de la Segunda Marquetalia, pero que no es la única, por lo que aseguró que podrían existir más grupos armados implicados.
+
+Precandidatos lamentan muerte de Uribe Turbay
+
+Un número significativo de precandidatos presidenciales han lamentado el magnicidio de Miguel Uribe Turbay.
+
+Para empezar, los cuatro precandidatos del Centro Democrático ya se pronuncieron lamentando la muerte de su copartidario. La primera en hacerlo fue la senadora María Fernanda Cabal, quien aseguró que “Mi corazón y mis oraciones están con su familia y seres queridos. Que Dios les conceda fortaleza en este momento de inmensa tristeza. Colombia pierde hoy a un hombre íntegro, con todas las capacidades y el compromiso para ayudar a construir un mejor país. Dios lo reciba en su gloria y, desde donde esté, nos inspire a seguir reconstruyendo esta nación que hoy enfrenta nuevamente sus peores épocas de violencia”.
+
+Por su parte, la senadora Paloma Valencia dijo que “Colombia llora de pie. Jamás vencida. Unida y firme. Colombia puede más. No importa cuánto la ataquen: Colombia no cae. Y vamos a seguir y no vamos a parar hasta que la vida y la libertad triunfen siempre”.
+
+El senador Andrés Guerra afirmó: “Duele, Colombia. Miguel, atento, amable, inteligente, juicioso, estudioso, comprometido, honesto, franco, descomplicado, buen anfitrión, buen compañero. Te acompañé tres años en el Senado y recorrimos Colombia como precandidatos de nuestro”.
+
+Y la senadora Paola Holguín dijo: “Todas las oraciones para que Dios sea fuente de fortaleza y consuelo en un momento tan doloroso. Que Miguel desde el cielo guíe a Colombia y que su lucha sea ejemplo para las nuevas generaciones. A su Padre, su Esposa, su Hermana, sus Hijitos, y toda la familia un abrazo”.
+
+Por su parte, la precandidata y experiodista Vicky Dávila aseguró que “Miguel, ya estás en el cielo, toda Colombia te tiene en el corazón. Gracias por tu lucha. A la familia Uribe Turbay, todo el amor. Dios cuide a nuestro adolorido país”.
+
+Precandidatos de la centroderecha también se han manifestado. El exsenador y el exministro de las TIC de Petro, Mauricio Lizcano, aseguró que “la noticia del magnicidio contra Miguel Uribe es un hecho lamentable que enluta a todos los colombianos. Una herida más para nuestra pobre Colombia, en un espiral de violencia donde han muerto miles de compatriotas. Un momento para que nos unamos en oración, en especial por su familia: para Maria Claudia, sus hijos, sus hermanos, sus padres. Sentimos su dolor”.
+
+El exgobernador del Meta Juan Guillermo Zuluaga, quien también está en el partidor de precandidatos, aseguró que “Miguel Uribe fue un guerrero que luchó sin descanso por sus convicciones, que se preparó y nunca se rindió. El mismo que desde niño, sufrió los rigores de la violencia.Hoy su batalla contra la muerte terminó. Con profundo dolor recibimos esta noticia y nos unimos a su familia en una oración a Dios”.
+
+Desde la izquierda y el progresismo también hubo mensajes de solidaridad.
+
+Gustavo Bolívar, precandidato del Pacto Histórico, manifestó: “Independientemente de lo que pensemos y de la ideología que tengamos, debemos respetar profundamente al otro y lo que piensa. Hay que eliminar las diferencias como excusa para mantener una violencia que nos azota desde hace 76 años”.
+
+Y la senadora María José Pizarro manifestó: “Miguel Uribe Turbay representaba ideas distintas a las mías, pero su voz debía ser respetada en el escenario democrático. Minorías apátridas siguen asesinando, solo entienden el lenguaje de la violencia y buscan influir en los destinos de la nación con golpes de sangre”.
+
+Grupo de expresidentes Libertad y Democracia condenaron magnicidio de Uribe Turbay
+
+El Grupo Libertad y Democracia, que reúne a expresidentes de varios países de América Latina, condenó el magnicidio de Miguel Uribe Turbay, definiéndolo como un “líder íntegro y defensor de la democracia. Honraremos su legado con unidad, compromiso democrático y lucha por la libertad”.
+
+“Exigimos categóricamente el total esclarecimiento de este crimen, con investigaciones rápidas, independientes y exhaustivas que conduzcan a la identificación y sanción de todos los responsables”, indicaron los exmandatarios.
+
+“Miguel Uribe fue un firme y valiente defensor de la libertad, la institucionalidad y el fortalecimiento de las instituciones republicanas. Su integridad, vocación de servicio y compromiso con el bienestar de los colombianos dejan un legado que trasciende fronteras y que continuará inspirando a quienes creemos en la causa de la democracia y la dignidad humana”.
+
+Y añadieron: “Expresamos nuestra más sentidas condolencias a su esposa, hijos, familia y allegados, acompañándolos en este momento de profundo dolor”.
+
+El comunicado está firmado por, entre otros, los expresidentes Felipe Calderón (México), Iván Duque (Colombia), Guillermo Lasso (Ecuador), Mireya Moscoso (Panamá), Jorge Tuto Quiroga (Bolivia) y Jeanine Añéz (Bolivia).
+
+Los expresidentes y miembros del Grupo Libertad y Democracia (@GrupoLyD), condenamos con dolor y firmeza el cobarde magnicidio de Miguel Uribe Turbay, líder íntegro y defensor de la democracia. Este crimen atenta contra Colombia y toda Iberoamérica. Honraremos su legado con. pic.twitter.com/f82OMOc9tA
+
+— Iván Duque 🇨🇴 (@IvanDuque) August 11, 2025
+
+Estas fueron las frases de la vida de política de Miguel Uribe Turbay
+
+La vida de Miguel Uribe estuvo marcada por sus reclamos de fortalecer la seguridad en su país y los recuerdos que le dejó una infancia sin su madre, Diana Turbay, quien fue asesinada por el cartel de Pablo Escobar. Uribe Turbay murió casi a la misma edad que su mamá y pone en el centro del debate las garantías que tienen los políticos colombianos para ejercer su rol. Lea aquí algunas de sus frases más memorables:
+
+Miguel Uribe y las frases de su vida política: “Un país sin violencia se volvió mi propósito”
+
+Petro liderará consejo de seguridad extraordinario; habla su jefe de Despacho
+
+El jefe de Despacho del presidente Gustavo Petro, Alfredo Saade, se refirió al magnicidio de Miguel Uribe Turbay. Al respecto dijo que el jefe de Estado realizará este lunes un consejo de seguridad extraordinario para “salvaguardar los bienes, la honra y la vida de todos los colombianos”.
+
+“La actividad política siempre tiene un riesgo. No creo que esto haya aumentado el miedo a los candidatos. Manejar bicicleta tiene un riesgo. Aparte en un país tan convulsionado, como lo ha estado en los últimos 200 años de muerte, guerra y de sacar al adversario”, afirmó.
+
+Partido Comunes envió condolencias a familia de Miguel Uribe
+
+El partido político Comunes, integrado por firmantes del Acuerdo Final de Paz, lamentó y condenó la muerte del precandidato presidencial Miguel Uribe. A través de un comunicado rechazaron la violencia política y convocaron a “converger en un gran Pacto Nacional”.
+
+Además de enviar condolencias a la familia del senador Uribe Turbay, el partido Comunes también envió un mensaje al Centro Democrático.
+
+“Enviamos nuestras condolencias a la familia y a la militancia del Partido Centro Democrático y extendemos una invitación a todas las colectividades políticas para promover acciones de reconciliación que, sumadas a nuestros esfuerzos de reparación y aportes a la verdad, sean la ruta que marque nuestro compromiso con la paz y el futuro de Colombia”.
+
+El Partido @ComunesCoL lamenta la muerte del senador Miguel Uribe Turbay.
+
+— Rodrigo Londoño (@TimoComunes) August 11, 2025
+
+Basta ya de violencia.
+
+Colombia lucha y vencerá en su anhelo de vivir en paz con justicia social. pic.twitter.com/6qbZvC1sZJ
+
+Unidad para las Víctimas sobre fallecimiento del senador Miguel Uribe Turbay
+
+La Unidad para la Atención y Reparación Integral a las Víctimas, a través de un comunicado a la opinión pública, lamentó “profundamente el fallecimiento del senador Miguel Uribe Turbay”, y presentó sus condolencias ante su esposa, su padre, su hermana y sus hijos.
+
+Además, hizo un llamado a excluir las armas del debate político, impulsando un Acuerdo Nacional que busca la convivencia pacífica y rechaza la violencia o la interferencia de grupos armados en los procesos electorales.
+
+Congreso aplaza agenda por tres días: así será su agenda
+
+Las mesas directivas del Senado y de la Cámara de Representantes indicaron que, por la muerte de Miguel Uribe, suspenderá su agenda legislativa por tres días para “acompañar a sus allegados en este momento de dolor”.
+
+De acuerdo con las mesas directivas del Congreso, “el Salón Elíptico del Capitolio Nacional será el espacio en el que ambas corporaciones, junto con el pueblo colombiano, podrán expresar su respeto, gratitud y despedida al senador Miguel Uribe Turbay”.
+
+La agenda protocolaria en el Capitolio será así:
+
+- Lunes 11 de agosto 3:00 p.m.: ingreso para familiares y amigos.
+
+- Martes 12 de agosto de 8.00 a.m. a 6:00 p.m.: ingreso al público
+
+- Miércoles 13 de agosto a las 9:00 a.m.: homenaje en el Congreso para familiares y traslado para la Catedral Primada de Colombia.
+
+"La investigación debe profundizarse": presidente Petro
+
+El presidente Gustavo Petro lamentó la muerte de Miguel Uribe este lunes, 11 de agosto, tras 65 días hospitalizado en la Unidad de Cuidados Intensivos (UCI) de la Fundación Santa Fe en Bogotá.
+
+“Mi sentido pésame a la familia del senador Miguel Uribe Turbay, y a las y los colombianos todos. La vida está por encima de cualquier ideología.”, manifestó Petro.
+
+También dijo que “Después de un genocidio político desatado entre liberales y conservadores, que dejó 300.000 campesinos muertos, después de otro genocidio político, cometido contra la izquierda del país, hemos pasado a una violencia centrada en las economías ilícitas, que se arrincona, cada vez más, en las fronteras y los puertos. Pero la muerte nos da sorpresas y nos asalta aún. En un gobierno progresista, amante de la vida, ha ocurrido un atentado con trágico final contra un senador de la oposición”.
+
+Hizo también un llamado a que avance el esclarecimiento de los motivos del atentado contra Uribe Turbay: “La investigación debe profundizarse. Y serán las autoridades competentes para ella, ayudada por expertos internacionales, quienes se pronunciarán en su momento. Al gobierno le queda repudiar el crimen y ayudar”.
+
+Y añadió: “Para nosotros, que hemos sido perseguidos y nuestros amigos asesinados, es una de nuestras prioridades. No es la venganza el camino de Colombia. Por venganzas llevamos décadas de violencia. No más. Por eso estamos tristes, nos duele la muerte de Miguel, como si fuera de los nuestros. Es una derrota. Cada vez que cae un colombiano asesinado, es una derrota de Colombia y de la vida”.
+
+Mi sentido pésame a la familia del senador Miguel Uribe Turbay, y a las y los colombianos todos.
+
+— Gustavo Petro (@petrogustavo) August 11, 2025
+
+La vida está por encima de cualquier ideología.
+
+He querido marcar un nuevo paradigma, incluso teórico, en mi gobierno, al colocar el proyecto del cuidado y la expansión de la vida,.
+
+“Profunda consternación”: Iglesia Católica por magnicidio de Uribe Turbay
+
+Monseñor Héctor Fabio Henao, obispo delegado para las relaciones Iglesia - Estado de la Conferencia Episcopal de Colombia, manifestó “profunda consternación” luego de que se conociera la muerte de Miguel Uribe este lunes en la madrugada.
+
+“Reiteramos el rechazo profundo, contundente, hacia toda forma de atentado contra la vida humana Colombia necesita recuperar el valor de la vida de todas las personas que habitan en este territorio”, manifestó.
+
+El vocero de la Iglesia Católica también hizo un llamado para “excluir de la política la violencia. Necesitamos que se haga una política en la cual prime el debate de las ideas y la capacidad de establecer proyectos de nación en los cuales todos podamos vivir de manera digna. Insistimos en el llamado a todo el pueblo colombiano para que asumamos este momento como una oportunidad para unirnos en torno a los grandes principios que rigen a la nación en torno al imperio de la ley y al Estado de Derecho”.
+
+Gremios económicos se pronunciaron
+
+Desde distintos gremios económicos se han sumado a las condolencias y los mensajes de tristeza por el fallecimiento de Miguel Uribe.
+
+Uno de quienes se pronunció fue Bruce Mac Master, el presidente de la Asociación Nacional de Empresarios de Colombia (ANDI).
+
+“Es un día de luto para toda Colombia, con él se calla a una voz que creía que Colombia podía ser un país mejor y quería ser parte de ese proceso”, dijo en sus redes sociales.
+
+Por su parte, Germán Bahamón, gerente de la Federación Nacional de Cafeteros, se sumó a los mensajes de tristeza e invitó a que su memoria inspire “a trabajar por Colombia con más fuerza”.
+
+“La violencia nunca será el camino para avanzar como país y sociedad”, añade la Asociación Nacional de Comercio Exterior (Analdex) tras ofrecer condolencias para la familia, amigos y allegados de Uribe.
+
+Además, algunas entidades han rechazado también todo tipo de violencia, como en el caso de Andesco (Asociación Nacional de Empresas de Servicios Públicos). “Rechazamos de manera categórica cualquier manifestación de violencia que atente contra la vida, la integridad y la libertad de líderes políticos, sociales y en general de todos los ciudadanos”, dijeron.
+
+Además, invitaron a que las diferencias se resuelvan siempre mediante el respeto, la institucionalidad y el diálogo, nunca a través de las agresiones.
+
+“Este hecho no solo enluta a una familia y a un equipo, sino que golpea los principios esenciales de la democracia. Ninguna vida debe perderse por pensar distinto. Colombia necesita un debate político donde la palabra prevalezca sobre las armas, donde el respeto sea el pilar del disenso y la participación”, expresó la Cámara Colombiana de Bienes y Servicios de Petróleo, Gas y Energía (CAMPETROL).
+
+Precandidatos del Centro Democrático lamentaron magnicidio de senador Uribe
+
+Los cuatro precandidatos del Centro Democrático ya se manifestaron por el magnicidio de Miguel Uribe Turbay.
+
+La primera en hacerlo fue la senadora María Fernanda Cabal, quien aseguró que “Mi corazón y mis oraciones están con su familia y seres queridos. Que Dios les conceda fortaleza en este momento de inmensa tristeza. Colombia pierde hoy a un hombre íntegro, con todas las capacidades y el compromiso para ayudar a construir un mejor país. Dios lo reciba en su gloria y, desde donde esté, nos inspire a seguir reconstruyendo esta nación que hoy enfrenta nuevamente sus peores épocas de violencia”.
+
+Tres días de luto en Bogotá
+
+La Alcaldía de Bogotá Carlos Fernando Galán decretó tres días en la capital por el magnicidio de Uribe Turbay.
+
+“Bogotá se une para honrar la vida de Miguel Uribe. Como ciudadano, concejal y secretario de Gobierno, Miguel le sirvió a la ciudad y trabajó por una Bogotá mejor. En solidaridad con su familia y seres queridos, Bogotá decretará 3 días de duelo. Que sea tiempo de reflexión y unidad. Por Miguel y por el país”, manifestó el alcalde de Bogotá.
+
+Uribe Turbay inició su carrera política en 2011, cuando fue elegido como concejal de Bogotá, llegando en 2014 a la presidencia de la Corporación. Entre 2016 y 2018 fue secretario de Gobierno durante la Alcaldía de Enrique Peñalosa.
+
+La Alcaldía de Bogotá decreta tres días de duelo por el asesinato de Miguel Uribe Turbay. pic.twitter.com/LMnteRh97s
+
+— Alcaldía de Bogotá (@Bogota) August 11, 2025
+
+ONU envía mensaje a familia de Miguel Uribe Turbay y hace llamado a elecciones sin violencia
+
+A través de redes sociales, la oficina de Naciones Unidas en Colombia lamentó el asesinato del senador y precandidato presidencial, Miguel Uribe Turbay, y envió un mensaje de condolencias a la familia.
+
+Asimismo, ONU Derechos Humanos Colombia pidió respeto por la vida e hizo un llamado por unas elecciones en paz.
+
+“Lamentamos profundamente la muerte del Senador Miguel Uribe, luego del atentado en su contra el 7 de junio. Expresamos nuestras condolencias y solidaridad a su familia. Llamamos al respeto por la vida de todas las personas y por unas próximas elecciones libres de violencia”, señala el mensaje en X.
+
+Nuestras condolencias y profunda solidaridad con la familia, amigos y colegas de Miguel Uribe Turbay. Es un momento doloroso para las y los colombianos. Es imperativo sacar la violencia del ejercicio de la política y garantizar la protección de la vida como base de la democracia.
+
+— Misión de la ONU en Colombia (@MisionONUCol) August 11, 2025
+
+En esa misma línea, la Misión de Verificación de la ONU en Colombia pidió sacar la violencia del ejercicio de la política.
+
+“Nuestras condolencias y profunda solidaridad con la familia, amigos y colegas de Miguel Uribe Turbay. Es un momento doloroso para las y los colombianos. Es imperativo sacar la violencia del ejercicio de la política y garantizar la protección de la vida como base de la democracia”, se lee.
+
+Fiscal general lamenta el magnicidio de Miguel Uribe Turbay
+
+La fiscal general, Luz Adriana Camargo Garzón, también se unió a los mensajes de condolencias. A través de redes sociales, escribió que “continúa el compromiso de identificar y judicializar a los determinadores de este crimen, tarea en la que no se descarta ninguna hipótesis. Trabajamos sin descanso con ese objetivo, en cumplimiento de nuestro deber institucional”.
+
+Director de la Policía Nacional promete capturar a todos los responsables del asesinato de Miguel Uribe
+
+El director de la Policía Nacional, el general Carlos Fernando Triana, expresó su solidaridad con la familia del senador y precandidato presidencial Miguel Uribe Turbay.
+
+“En nombre de los 186.000 policías de la patria nos unimos al sentimiento de solidaridad que embarga a la familia del senador Miguel Uribe Turbay.
+
+En este día de profunda tristeza, reafirmamos nuestro compromiso de capturar hasta el último de los responsables de este magnicidio que enluta a Colombia.”, señaló el alto oficial.
+
+Triana envió un mensaje especial a la esposa e hijos de Uribe Turbay, a quienes extendió sus oraciones, y concluyó con un llamado a honrar su memoria: “¡Paz en su tumba!”.
+
+¡LUTO NACIONAL! En nombre de los 186.000 policías de la patria nos unimos al sentimiento de solidaridad que embarga a la familia del senador @MiguelUribeT.
+
+— Mayor general Carlos Fernando Triana Beltrán (@DirectorPolicia) August 11, 2025
+
+En este día de profunda tristeza, reafirmamos nuestro compromiso de capturar hasta el último de los.
+
+Mandatarios locales lamentan muerte de Uribe Turbay
+
+Tras confirmarse la muerte, en la madrugada de este lunes 11 de agosto, de Miguel Uribe, alcaldes y gobernadores despidieron al político y enviaron mensajes rechazando la violencia.
+
+Dentro de los primeros en pronunciarse está el gobernador de Antioquia, Julián Andrés Rendón, quien envió un mensaje de condolencias. “¡Cuánto dolor para una familia! Colombia llora la partida del Senador y precandidato presidencial Miguel Uribe Turbay. Los antioqueños enviamos un abrazo que acompañe y entregue sosiego en medio de tanta tristeza y preocupación”.
+
+¡Cuánto dolor para una familia!
+
+— Andrés Julián (@AndresJRendonC) August 11, 2025
+
+Colombia llora la partida del Senador y precandidato presidencial Miguel Uribe Turbay.
+
+Los Antioqueños enviamos un abrazo que acompañe y entregue sosiego en medio de tanta tristeza y preocupación.
+
+Dios nos ilumine para afrontar, con serenidad y. pic.twitter.com/W8vBpSTIGM
+
+A la par, el alcalde de Medellín, Federico Gutiérrez, se refirió al dolor que genera la muerte de Uribe y la necesidad de alzar la voz y luchar por Colombia. “Su asesinato no tiene justificación. Nos devolvieron a la peor versión de Colombia: esa donde pensar distinto se paga con sangre. No solo atentaron contra él, atentaron contra la democracia. Contra todos los que creemos que este país se construye con argumentos, no con balas. Nos duele Colombia 🇨🇴. Pero duele más ver cómo la están dejando desangrar”.
+
+Me duele el alma.
+
+— Fico Gutiérrez (@FicoGutierrez) August 11, 2025
+
+Que profunda tristeza la que siento por la muerte de Miguel Uribe. 🙏🏻
+
+Hoy oramos por su familia y los acompañamos con el corazón, en el dolor y en la indignación.
+
+Su asesinato no tiene justificación.
+
+Nos devolvieron a la peor versión de Colombia: esa donde. pic.twitter.com/f9dKQQuq9z
+
+Desde el Valle del Cauca, la gobernadora Dilian Francisca Toro, envió condolencias a la familia del congresista e indicó que es necesario “mantenernos unidos, de desescalar el odio y defender juntos la vida”. A esto sumo que “el pasado se nos vuelve presente y una vida más se nos va en manos de nuestro peor enemigo: la violencia. El país entero durante dos meses oró con fe e ilusión por la recuperación de Miguel, y hoy, con tristeza, debemos alzar la voz para rechazar la violencia que le arrebató la vida”.
+
+De igual forma, Alejandro Eder, alcalde de Cali, aseguró que no es aceptable la nueva ola de violencia. “Los colombianos no aceptamos este nuevo descenso hacia la violencia. Exigimos respuestas claras y cárcel para sus asesinos. No se debe permitir que Colombia vuelva a caer en el camino de la violencia política”.
+
+Descansa en paz Miguel. Todas nuestras oraciones están contigo, con tu familia y con Colombia.
+
+— Alejandro Eder (@alejoeder) August 11, 2025
+
+Los colombianos no aceptamos este nuevo descenso hacia la violencia. Exigimos respuestas claras y cárcel para sus asesinos.
+
+Desde la costa Caribe, el alcalde de Cartagena, Alejandro Char, destacó a Uribe como “un alma brillante cuya bondad y pasión nos marcaron profundamente”.
+
+Con el corazón roto y destrozado, amanecemos con la triste noticia de la partida de Miguel Uribe, un alma brillante cuya bondad y pasión nos marcaron profundamente. Un abrazo solidario a su esposa, hijos y familiares.
+
+— Alejandro Char (@AlejandroChar) August 11, 2025
+
+Tu legado vivirá siempre en nosotros. Descansa en paz. 🙏🏻 pic.twitter.com/oFsmE5YdVu
+
+De igual forma se refirió a la necesidad de enfrentar la polarización. “Pierde Colombia, pierde la democracia. Un país que asuma a su contrario como su enemigo a eliminar es inviable. Hagamos un alto, reflexionemos. Va para todos. Condolencias y solidaridad con sus familiares, amigos y seguidores”.
+
+Por su parte, Carlos Pinedo Cuello, alcalde de Santa Marta, indicó que “es urgente que como sociedad rechacemos cualquier forma de violencia y trabajemos juntos por la paz. Mis condolencias a su familia, amigos y seguidores”, mientras que el alcalde de Montería, Hugo F. Kerguelén, aseguró que “no podemos normalizar que la violencia siga dictando nuestro destino. Que su muerte sea el punto de quiebre para unirnos y transformar este país de raíz”.
+
+Mis condolencias a la familia y seres queridos de Miguel Uribe. Su asesinato es una herida profunda que indigna y avergüenza a Colombia. No podemos normalizar que la violencia siga dictando nuestro destino. Que su muerte sea el punto de quiebre para unirnos y transformar este.
+
+— Hugo F. Kerguelen G. (@kerguelenhugo) August 11, 2025
+
+Por este mismo camino, el gobernador de Córdoba Erasmo Zuleta resaltó que Miguel Uribe creyó en la política como herramienta de construcción de paz. “Hoy no solo se apaga una vida y sus ideales, también sentimos el impacto de un hecho que genera miedo, desesperanza y dolor en nuestra nación. A su esposa, familia y seres queridos, toda nuestra solidaridad y acompañamiento en este momento tan difícil. Que el miedo no nos haga perder la esperanza”.
+
+Lamento la muerte de Miguel, un joven que creyó en la política como herramienta para construir país.
+
+— Erasmo Zuleta Bechara (@ErasmoZB) August 11, 2025
+
+Hoy no solo se apaga una vida y sus ideales, también sentimos el impacto de un hecho que genera miedo, desesperanza y dolor en nuestra nación.
+
+A su esposa, familia y seres. pic.twitter.com/Ee0n6L6DR4
+
+De igual forma, el gobernador del Atlántico, Eduardo Verano, hizo un llamado a la reflexión. “Que la violencia no se vuelva costumbre, que el dolor y la polarización no nos nublen nuestra sensibilidad, Colombia necesita paz”.
+
+Un momento de reflexión y tristeza para nuestro adolorido país: defensora Iris Marín
+
+La defensora Iris Marín también envió un mensaje de pésame a la familia de Uribe Turbay. En redes sociales escribió: Mi más sentido pésame a la familia de Miguel Uribe, a su hijo, a su esposa, a su hermana, a su padre. A quienes trabajaban con él y a sus copartidarios del Centro Democrático.
+
+Mi más sentido pésame a la familia de Miguel Uribe, a su hijo, a su esposa, a su hermana, a su padre. A quienes trabajaban con él y a sus copartidarios del @CeDemocratico.
+
+— Iris Marín Ortiz (@MarnIris) August 11, 2025
+
+Un momento de reflexión y tristeza para nuestro adolorido país.
+
+"Colombia le exige a justicia que avance en las investigaciones": Pizarro
+
+La senadora María José Pizarro (Pacto Histórico) lamentó la muerte de su compañero en el Congreso, asegurando que, pese a la distancia ideológica, rechazó siempre la violencia política en el país, de la que también fue víctima su padre, Carlos Pizarro.
+
+“Mi mensaje de solidaridad y respeto a su familia y copartidarios políticos en estos momentos de dolor y duelo nacional”, escribió la congresista en X.
+
+Y agregó: “Miguel Uribe Turbay representaba ideas distintas a las mías, pero su voz debía ser respetada en el escenario democrático. Minorías apátridas siguen asesinando, solo entienden el lenguaje de la violencia y buscan influir en los destinos de la nación con golpes de sangre”.
+
+También pidió que se avance en la investigación para que el magnicidio de Uribe Turbay no quede en la impunidad: “Solo con verdad y justicia será erradicada la violencia política que ha acabado con la vida de Miguel Uribe Turbay y tantos dirigentes políticos que tenían mucho que aportar a esta sociedad”.
+
+Lamento profundamente la muerte de Miguel Uribe Turbay colega en el Senado y precandidato presidencial.
+
+— María José Pizarro Rodríguez (@PizarroMariaJo) August 11, 2025
+
+Mi mensaje de solidaridad y respeto a su familia y copartidarios políticos en estos momentos de dolor y duelo nacional.
+
+Miguel Uribe Turbay representaba ideas distintas a.
+
+Gobierno Petro pide respeto por la vida tras muerte de Uribe Turbay
+
+La vicepresidenta Francia Márquez fue una de las primeras funcionarias del gobierno del presidente Gustavo Petro en referirse a la muerte del senador Uribe. Lamentó “profundamente el fallecimiento del senador y precandidato presidencial Miguel Uribe”.
+
+Lamento profundamente el fallecimiento del senador y precandidato presidencial @MiguelUribeT. A su familia, amigos y seguidores les envío toda mi solidaridad en este momento de dolor.
+
+— Francia Márquez Mina (@FranciaMarquezM) August 11, 2025
+
+Hoy es un día triste para el país. La violencia no puede seguir marcando nuestro destino. La.
+
+Y agregó: “hoy es un día triste para el país. La violencia no puede seguir marcando nuestro destino. La democracia no se construye con balas ni con sangre, se construye con respeto, con diálogo y reconociendo nuestras diferencias, sin importar la posición política”.
+
+También se pronunció la primera dama, Verónica Alcocer: “Hoy Colombia sufre una pérdida irreparable. Ninguna idea, lucha o diferencia justifica la violencia. Colombia no puede seguir perdiendo a sus hijos por pensar distinto. Abrazo con el alma a su familia, a sus amigos y a quienes compartieron su camino. Que su partida nos lleve a reconciliarnos y a construir una nación donde el respeto por la vida y la diferencia sean el faro que nos guíe”.
+
+Hoy Colombia sufre una pérdida irreparable. pic.twitter.com/EjFkHZwM5e
+
+— Verónica Alcocer García (@Veronicalcocerg) August 11, 2025
+
+El Ministerio del Interior también “lamenta profundamente el fallecimiento del senador Miguel Uribe Turbay. Extendemos nuestras sentidas condolencias a su esposa, hijos, padre, hermana y demás familiares. Acompañamos a sus seres queridos en este difícil momento”.
+
+Desde la Presidencia también se envió un mensaje de solidaridad con la familia del senador Uribe: “Expresamos nuestras más sinceras condolencias y toda nuestra solidaridad a su familia, amigos, y seres queridos en este difícil momento”.
+
+La Presidencia de la República lamenta profundamente el fallecimiento del Senador Miguel Uribe Turbay.
+
+— Presidencia Colombia 🇨🇴 (@infopresidencia) August 11, 2025
+
+Expresamos nuestras más sinceras condolencias y toda nuestra solidaridad a su familia, amigos, y seres queridos en este difícil momento. pic.twitter.com/DiO9vVOUVk
+
+El ministro de Defensa, Pedro Sánchez, lamentó este lunes el fallecimiento del senador y precandidato presidencial Miguel Uribe Turbay, víctima de un atentado sicarial el pasado 7 de junio en Bogotá.
+
+“Desde el sector defensa nos unimos al dolor de su familia, amigos y seres queridos, y les enviamos un abrazo fraterno y sentidas condolencias en este momento de inmensa tristeza e irreparable ausencia”, expresó el jefe de la cartera.
+
+Sánchez aseguró que la mejor forma de honrar su memoria es “promover la unión y la paz para proteger la vida y la democracia en cada rincón del país” y recalcó que, junto con la Fiscalía General, se adelantan esfuerzos para identificar y judicializar a todos los responsables.
+
+Lamentamos profundamente el fallecimiento del senador Miguel Uribe Turbay. Desde el sector defensa nos unimos al dolor de su familia, amigos y seres queridos, y les enviamos un abrazo fraterno y sentidas condolencias en este momento de inmensa tristeza e irreparable ausencia. pic.twitter.com/5TACrHtwvx
+
+— Pedro Arnulfo Sanchez S. Orgullosamente Colombiano (@PedroSanchezCol) August 11, 2025
+
+Gobierno Trump lamenta la muerte de Uribe Turbay
+
+El secretario de Estado de EE.UU., Marco Rubio, lamentó el hecho: “Lamento profundamente la trágica muerte del senador Miguel Uribe. Estados Unidos se solidariza con su familia y el pueblo colombiano, a la vez que demanda justicia”.
+
+Deeply saddened to learn of Colombian Senator @MiguelUribeT's tragic death. The United States stands in solidarity with his family, the Colombian people, both in mourning and demanding justice for those responsible.
+
+— Secretary Marco Rubio (@SecRubio) August 11, 2025
+
+La representante de Florida en el Congreso María Elvira Salazar también se refirió al magnicidio de Miguel Uribe Turbay: “Con muchísima tristeza acompaño a la familia y seres queridos de Miguel Uribe en este momento tan doloroso. Su partida deja un vacío inmenso en quienes lo conocieron y duele profundamente en el corazón de toda Colombia”.
+
+Y agregó: “Miguel fue un líder apasionado, un servidor público íntegro y un colombiano que amó y defendió a su país hasta el último día. Todo mi cariño y solidaridad para su esposa, María Claudia, y para toda su familia en estos momentos tan difíciles”.
+
+Con muchísima tristeza acompaño a la familia y seres queridos de Miguel Uribe en este momento tan doloroso. Su partida deja un vacío inmenso en quienes lo conocieron y duele profundamente en el corazón de toda Colombia.
+
+— María Elvira Salazar 🇺🇸 (@MaElviraSalazar) August 11, 2025
+
+Miguel fue un líder apasionado, un servidor público íntegro.
+
+Fundación Santa Fe confirma hora de muerte de Miguel Uribe
+
+La Fundación Santa Fe de Bogotá, donde estuvo hospitalizado el senador Miguel Uribe desde el pasado 7 de junio, confirmó la muerte del precandidato del Centro Democrático.
+
+Adolfo Llinás, director médico de la clínica, leyó un comunicado en el que se explicó que el fallecimiento de Uribe fue a la 1:56 a.m. de este lunes 11 de agosto. “El equipo a cargo del cuidado del señor Uribe Turbay en todas las áreas de la institución trabajó incansablemente durante estos más de dos meses desde su ingreso gravemente herido”.
+
+Este es el comunicado completo:
+
+"Siempre serás el amor de mi vida": María Claudia Tarazona
+
+María Claudia Tarazona escribió un sentido mensaje en sus redes sociales en el que confirmó la muerte de su esposo. “Siempre serás el amor de mi vida. Gracias por una vida llena de amor, gracias por ser un papá para las niñas, el mejor papá para Alejandro“.
+
+Álvaro Uribe también reaccionó: “El mal todo lo destruye, mataron la esperanza”
+
+El expresidente y líder natural del Centro Democrático, Álvaro Uribe Vélez, también reaccionó en redes sociales ante la noticia. “El mal todo lo destruye, mataron la esperanza. Que la lucha de Miguel sea luz que ilumine el camino correcto de Colombia”.
+
+El mal todo lo destruye, mataron la esperanza. Que la lucha de Miguel sea luz que ilumine el camino correcto de Colombia.
+
+— Álvaro Uribe Vélez (@AlvaroUribeVel) August 11, 2025
+
+Procuraduría se pronuncia: “Hoy más que nunca se hace necesario dejar de lado la pugnacidad y la polarización”
+
+Tras conocer la noticia, la Procuraduría envió un mensaje a la familia del senador y otro más para el país. “Hoy más que nunca se hace necesario dejar de lado la pugnacidad y la polarización y propender para que encontremos como país espacios de diálogo, de consensos, y que nos acerquen a la paz y a la reconciliación, que nos alejen de la violencia que hoy nos enluta y entristece como Nación“.
+
+Para conocer más sobre justicia, seguridad y derechos humanos, visite la sección Judicial de El Espectador.
+
+Temas recomendados:
